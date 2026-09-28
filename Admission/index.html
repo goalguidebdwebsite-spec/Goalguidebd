@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/webp" href="../Images/Goalguide_Logo.webp">
+  <title>Admission</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../communication-buttons.css?v=20260927">
+  <link rel="stylesheet" href="../mobile-polish.css?v=20260927-motion1">
+</head>
+<body>
+
+  <!-- Header Starts Here -->
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+      <a class="brand" href="../index.html" target="_self" rel="noopener noreferrer">
+        <img class="brand-logo" src="../Images/Goalguide_Logo.webp" alt="Goal Guide BD logo">
+        <span class="brand-name">Goal Guide BD</span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-menu" id="nav-menu">
+        <ul class="nav-links">
+          <li><a href="../index.html" target="_self" rel="noopener noreferrer">Home</a></li>
+          <li><a href="../German_Language/index.html" target="_self" rel="noopener noreferrer">German Language</a></li>
+          <li><a href="../Class_Schedule/index.html" target="_self" rel="noopener noreferrer">Class Schedule</a></li>
+          <li><a href="index.html" target="_self" rel="noopener noreferrer">Admission</a></li>
+          <li><a href="../Exam/index.html" target="_self" rel="noopener noreferrer">Exam</a></li>
+          <li><a href="../About_Us/index.html" target="_self" rel="noopener noreferrer">About Us</a></li>
+        </ul>
+        <a class="btn-contact" href="../Contact_US/index.html" target="_self" rel="noopener noreferrer">Contact Us</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Header Ends Here -->
+
+  <!-- Admission Hero Starts Here -->
+  <section class="admission-hero" aria-label="Admission">
+    <div class="admission-hero-content">
+      <h1>Admission</h1>
+    </div>
+  </section>
+  <!-- Admission Hero Ends Here -->
+
+  <!-- Admission Registration Form Starts Here -->
+  <main class="registration-page">
+    <section class="registration-card" aria-labelledby="registration-title">
+      <header class="registration-heading">
+        <h1 id="registration-title">Registration Form</h1>
+        <p>In order to get admitted to the course, we are requesting you complete the Registration Form below. After receiving your details a confirmation email will be sent within 2 working days. If you have any queries, please email <a id="admission-contact-email" href="mailto:goalguidebdwebsite@gmail.com">goalguidebdwebsite@gmail.com</a> or send a message on WhatsApp <a id="admission-contact-whatsapp" href="https://wa.me/8801717099770">+88 01717099770</a>.</p>
+      </header>
+
+      <form class="registration-form" id="admission-registration-form">
+        <p class="registration-success" id="registration-success" role="status" aria-live="polite" hidden>Registration Form Submitted. Your registration ID is <strong id="registration-success-id"></strong>.</p>
+
+        <label class="registration-field">
+          <span>German Course <b>*</b></span>
+          <select id="registration-course" name="German Course" required><option value="">Select Course</option></select>
+        </label>
+
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>Select Shift <b>*</b></span>
+            <select id="registration-shift" name="Shift" required><option value="">Select Shift</option></select>
+          </label>
+          <label class="registration-field">
+            <span>Online/Offline Learning <b>*</b></span>
+            <select id="registration-learning-mode" name="Learning Mode" required><option value="">Select Learning Mode</option></select>
+          </label>
+        </div>
+
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>First Name <b>*</b></span>
+            <input type="text" name="First Name" autocomplete="given-name" required>
+          </label>
+          <label class="registration-field">
+            <span>Last Name <b>*</b></span>
+            <input type="text" name="Last Name" autocomplete="family-name" required>
+          </label>
+        </div>
+
+        <fieldset class="registration-field registration-gender">
+          <legend>Gender <b>*</b></legend>
+          <label><input type="radio" name="Gender" value="Male" required> Male</label>
+          <label><input type="radio" name="Gender" value="Female" required> Female</label>
+        </fieldset>
+
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>Date of Birth <b>*</b></span>
+            <input type="date" name="Date of Birth" autocomplete="bday" required>
+          </label>
+          <label class="registration-field">
+            <span>Place of Birth <b>*</b></span>
+            <input type="text" name="Place of Birth" required>
+          </label>
+        </div>
+
+        <label class="registration-field">
+          <span>Educational Qualification <b>*</b></span>
+          <input type="text" name="Educational Qualification" required>
+        </label>
+
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>Mobile Number <b>*</b></span>
+            <input type="tel" name="Mobile Number" autocomplete="tel" required>
+          </label>
+          <label class="registration-field">
+            <span>Email Address <b>*</b></span>
+            <input type="email" id="registration-email" name="Email Address" autocomplete="email" required>
+          </label>
+        </div>
+
+        <h2 class="registration-subheading">Present Address</h2>
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>Address Line <b>*</b></span>
+            <input type="text" name="Address Line" autocomplete="street-address" required>
+          </label>
+          <label class="registration-field">
+            <span>City <b>*</b></span>
+            <input type="text" name="City" autocomplete="address-level2" required>
+          </label>
+        </div>
+
+        <div class="registration-grid">
+          <label class="registration-field">
+            <span>Post Code <b>*</b></span>
+            <input type="text" name="Post Code" autocomplete="postal-code" required>
+          </label>
+          <label class="registration-field">
+            <span>Country <b>*</b></span>
+            <select id="registration-country" name="Country" autocomplete="country-name" required><option value="">Select Country</option></select>
+          </label>
+        </div>
+
+        <div class="registration-grid registration-upload-grid">
+          <label class="registration-field">
+            <span>Passport / NID / Birth Certificate <b>*</b></span>
+            <input type="file" name="attachment_1_passport_identity_document" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" data-registration-upload required>
+          </label>
+          <label class="registration-field">
+            <span>Passport Size Photo <b>*</b></span>
+            <input type="file" name="attachment_2_passport_photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-registration-upload required>
+          </label>
+        </div>
+
+        <label class="registration-field">
+          <span>Why do you want to learn German? <b>*</b></span>
+          <select id="registration-reason" name="Reason for Learning German" required><option value="">Select Reason</option></select>
+        </label>
+
+        <label class="registration-field">
+          <span>Payment Method <b>*</b></span>
+          <select id="registration-payment-method" name="Payment Method" required><option value="">Select Payment Method</option></select>
+        </label>
+
+        <label class="registration-field">
+          <span>Payment Slip / Screenshot <b>*</b></span>
+          <input type="file" name="attachment_3_payment_slip" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" data-registration-upload required>
+        </label>
+        <p class="registration-files-status" id="registration-files-status" aria-live="polite">Choose all three required files. Combined upload limit: 10 MB.</p>
+
+        <label class="registration-field">
+          <span>Your Message</span>
+          <textarea name="Message" rows="4"></textarea>
+        </label>
+
+        <p class="registration-status" id="registration-status" role="status" aria-live="polite"></p>
+        <button class="registration-submit" type="submit">Submit Form</button>
+      </form>
+    </section>
+  </main>
+  <!-- Admission Registration Form Ends Here -->
+
+  <!-- Admission Contact Questions Starts Here -->
+  <section class="admission-questions" id="admission-questions" aria-labelledby="admission-questions-title">
+    <div class="admission-questions-backdrop" aria-hidden="true"></div>
+    <div class="admission-questions-overlay" aria-hidden="true"></div>
+    <div class="admission-questions-inner">
+      <div class="admission-questions-card">
+        <h2 id="admission-questions-title">Any questions?</h2>
+        <p class="admission-questions-call">Call: <a id="admission-contact-phone" href="tel:+8801717099770">+880 1717-099770</a></p>
+        <p class="admission-questions-available">Available: <span id="admission-contact-available">Saturday to Friday</span></p>
+        <h3>Get in Touch</h3>
+        <p>Office Days: <span id="admission-contact-office-days">Saturday to Thursday</span></p>
+        <p>Time: <span id="admission-contact-time">10:00 AM - 07:00 PM</span></p>
+        <p>Email: <a id="admission-contact-email" href="mailto:info.waisbd@gmail.com">info.waisbd@gmail.com</a></p>
+      </div>
+    </div>
+  </section>
+  <!-- Admission Contact Questions Ends Here -->
+
+  <!-- Footer Starts Here -->
+    <footer class="gf" id="site-footer">
+    <div class="gf-inner">
+      <div class="gf-grid">
+ 
+        <div class="gf-brand">
+          <img class="gf-logo" id="f-logo" src="" alt="Logo">
+          <p class="gf-desc" id="f-desc"></p>
+          <div class="gf-social" id="f-social"></div>
+        </div>
+ 
+        <div class="gf-col">
+          <h3>Company</h3>
+          <ul class="gf-links">
+            <li><a href="../About_Us/index.html">About Us</a></li>
+            <li><a href="../German_Language/index.html">Courses</a></li>
+            <li><a href="../Exam/index.html">Exams &amp; Fees</a></li>
+            <li><a href="../Gallery/index.html">Gallery</a></li>
+            <li><a href="../Blog/index.html">Blog &amp; Updates</a></li>
+          </ul>
+        </div>
+ 
+        <div class="gf-col">
+          <h3>Legals</h3>
+          <ul class="gf-links">
+            <li><a href="../Terms_and_Conditions/">Terms and Conditions</a></li>
+            <li><a href="../Privacy_Policy/index.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+ 
+        <div class="gf-col" id="f-contact-col">
+          <h3 id="f-contact-title"></h3>
+          <ul class="gf-contact" id="f-contact"></ul>
+        </div>
+ 
+      </div>
+ 
+      <div class="gf-bottom">
+        <p id="f-copy"></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Footer Ends here -->
+  <script src="script.js?v=20260928-contact-fields"></script>
+  <script src="../communication-buttons.js?v=20260927"></script>
+  <script src="../scroll-effects.js?v=20260927-motion1"></script>
+</body>
+</html>

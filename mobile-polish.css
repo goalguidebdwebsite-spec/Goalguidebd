@@ -1,0 +1,235 @@
+/* Shared mobile refinement for the public site footer. */
+@media (max-width: 600px) {
+  #site-footer {
+    color: #f8fafc;
+    background: #000;
+    font-family: var(--nav-font, "Segoe UI", Arial, sans-serif);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  #site-footer .gf-inner {
+    width: min(100% - 32px, 560px);
+    margin: 0 auto;
+    padding: 42px 0 16px;
+  }
+
+  #site-footer .gf-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 30px 22px;
+  }
+
+  #site-footer .gf-brand {
+    grid-column: 1 / -1;
+    gap: 15px;
+  }
+
+  #site-footer .gf-logo {
+    width: 68px;
+    height: 68px;
+  }
+
+  #site-footer .gf-desc {
+    max-width: 440px;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  #site-footer .gf-social {
+    gap: 10px;
+  }
+
+  #site-footer .gf-social-link {
+    width: 39px;
+    height: 39px;
+    border-color: #475569;
+    background: rgb(255 255 255 / 5%);
+  }
+
+  #site-footer .gf-col h3 {
+    margin: 0 0 15px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #site-footer .gf-links {
+    gap: 11px;
+  }
+
+  #site-footer .gf-links a {
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  #site-footer .gf-contact {
+    gap: 13px;
+    padding: 0;
+  }
+
+  #site-footer .gf-contact li {
+    align-items: flex-start;
+    gap: 11px;
+    color: #dbe3ed;
+    font-size: 14px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  #site-footer .gf-contact svg,
+  #site-footer .gf-contact svg.gf-ico-envelope,
+  #site-footer .gf-contact svg.gf-ico-location-dot {
+    width: 19px;
+    height: 19px;
+    margin-top: 2px;
+    color: #dbe3ed;
+  }
+
+  #site-footer .gf-contact a {
+    overflow-wrap: anywhere;
+  }
+
+  #site-footer .gf-bottom {
+    margin-top: 30px;
+    padding: 17px 0 4px;
+    border-color: #303b49;
+  }
+
+  #site-footer .gf-bottom p {
+    color: #aeb9c8;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+/* Mobile browsers were switching the shared journey backdrop back to scroll. */
+@media (max-width: 990px) {
+  #home-journey .home-journey-backdrop {
+    background-attachment: fixed !important;
+  }
+}
+
+/* Smooth in-page navigation plus lightweight, left-to-center card reveals. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+.scroll-motion-card:not(.scroll-motion-visible) {
+  opacity: 0;
+  translate: -20px 0;
+}
+
+.scroll-motion-card {
+  transition: opacity 480ms cubic-bezier(.22, .61, .36, 1),
+    translate 480ms cubic-bezier(.22, .61, .36, 1);
+  transition-delay: var(--scroll-motion-delay, 0ms);
+  will-change: opacity, translate;
+}
+
+.scroll-motion-card.scroll-motion-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (max-width: 700px) {
+  .scroll-motion-card:not(.scroll-motion-visible) {
+    translate: -18px 0;
+  }
+
+  .scroll-motion-card {
+    transition-duration: 300ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .scroll-motion-card,
+  .scroll-motion-card:not(.scroll-motion-visible),
+  .scroll-motion-card.scroll-motion-visible,
+  .v7-reveal {
+    opacity: 1 !important;
+    translate: 0 0 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+}
+
+/* Keep the home About section calm on phones and place its image before the CTA. */
+@media (max-width: 700px) {
+  #home-about {
+    min-height: 0;
+    padding: 0 0 46px;
+    background: #fff;
+  }
+
+  #home-about .home-about-bg {
+    inset: 0;
+    height: auto;
+    background: linear-gradient(180deg, #fff0cc 0, #fff7e6 230px, #fff 520px);
+  }
+
+  #home-about .home-about-inner {
+    display: flex;
+    flex-direction: column;
+    width: min(100% - 32px, 520px);
+    min-height: 0;
+    gap: 0;
+  }
+
+  #home-about .home-about-copy {
+    display: contents;
+  }
+
+  #home-about .home-about-copy h2 {
+    order: 0;
+    margin: 0 0 20px;
+    padding-top: 42px;
+    font-size: clamp(27px, 7vw, 32px);
+    line-height: 1.2;
+  }
+
+  #home-about .home-about-copy p,
+  #home-about .home-about-copy p + p {
+    order: 0;
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  #home-about .home-about-media {
+    order: 1;
+    width: 100%;
+    height: clamp(270px, 78vw, 390px);
+    margin: 4px 0 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgb(23 31 42 / 13%);
+  }
+
+  #home-about .home-about-media img {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #home-about .home-about-btn {
+    order: 2;
+    align-self: flex-start;
+    min-width: 180px;
+    min-height: 50px;
+    margin: 22px 0 0;
+    border-radius: 8px;
+  }
+}

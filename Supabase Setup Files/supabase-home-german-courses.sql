@@ -1,0 +1,3 @@
+-- Retired setup file. Run supabase_home_complete_setup.sql instead.
+-- The complete setup creates this Home-only card settings table and preserves
+-- any existing content while applying the current access policies.

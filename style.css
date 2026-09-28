@@ -1,0 +1,1969 @@
+:root {
+  --red: #ed1c24;
+  --red-dark: #c9151c;
+  --ink: #222;
+  --nav-font: "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+/* ===== Navbar ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f7f7f7;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  min-height: 81px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 6vw, 6.35rem);
+  font-family: var(--nav-font);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 1.67rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--ink);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* Selected + hover colour */
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--red);
+}
+
+.btn-contact {
+  display: inline-block;
+  padding: .9rem 2.15rem;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-contact:hover,
+.btn-contact.active {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+/* Hamburger (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  position: absolute;
+  left: 4px;
+  width: 36px;
+  height: 3px;
+  background: var(--ink);
+  transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+}
+
+.nav-toggle span:nth-child(1) { top: 10px; }
+.nav-toggle span:nth-child(2) { top: 20px; }
+.nav-toggle span:nth-child(3) { top: 30px; }
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  top: 20px;
+  transform: rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  top: 20px;
+  transform: rotate(-45deg);
+}
+
+:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* ===== Mobile / tablet ===== */
+@media (max-width: 990px) {
+  .navbar {
+    min-height: 84px;
+    padding: 0 1.5rem;
+  }
+
+  .brand-logo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand-name {
+    font-size: 1.5rem;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 2rem;
+    right: 2rem;
+    display: none;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1.15rem;
+    text-align: center;
+  }
+
+  .nav-links a {
+    font-size: 1.15rem;
+    text-transform: uppercase;
+  }
+
+  .btn-contact {
+    align-self: center;
+    padding: 0.9rem 2.5rem;
+    color: #fff;
+    background: var(--red);
+    border-color: var(--red);
+    border-radius: 8px;
+  }
+
+  .btn-contact:hover {
+    background: var(--red-dark);
+    border-color: var(--red-dark);
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nav-menu {
+    left: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Header ends here */
+
+/* Hero starts here */
+
+#hero,
+#hero *,
+#hero *::before,
+#hero *::after {
+  box-sizing: border-box;
+}
+
+#hero {
+  position: relative;
+  width: 100%;
+  background-color: #3b3129;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.32) 45%, rgba(0, 0, 0, 0.1) 100%),
+    url("Images/hero-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#hero .hero-inner {
+  padding: 198px clamp(1.25rem, 6.1vw, 116px) 80px;
+}
+
+/* ---- Heading ---- */
+#hero .hero-title {
+  max-width: 780px;
+  margin: 0;
+  color: #fff;
+  font-family: inherit;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 100px;
+  text-transform: uppercase;
+}
+
+#hero .hero-highlight {
+  color: #ed1c24;
+}
+
+/* ---- White card ---- */
+#hero .hero-card {
+  width: 601px;
+  max-width: 100%;
+  margin-top: 143px;
+  padding: 60px;
+  color: #231f20;
+  background: #fff;
+  border-radius: 18px;
+}
+
+#hero .hero-flag {
+  display: block;
+  width: 63px;
+  height: 38px;
+  margin-bottom: 60px;
+  background: linear-gradient(
+    to bottom,
+    #000 0 33.34%,
+    #dd0000 33.34% 66.67%,
+    #ffce00 66.67% 100%
+  );
+}
+
+#hero .hero-text {
+  margin: 0 -16px 0 0;
+  color: #231f20;
+  font-size: 21px;
+  line-height: 37px;
+}
+
+#hero .hero-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 25px;
+  margin-top: 62px;
+}
+
+#hero .hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 77px;
+  padding: 0 38px;
+  font-family: inherit;
+  font-size: 17.6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid #231f20;
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+#hero .hero-btn-dark {
+  color: #fff;
+  background: #231f20;
+}
+
+#hero .hero-btn-dark:hover {
+  background: #ed1c24;
+  border-color: #ed1c24;
+}
+
+#hero .hero-btn-light {
+  color: #231f20;
+  background: #fff;
+}
+
+#hero .hero-btn-light:hover {
+  color: #fff;
+  background: #231f20;
+}
+
+/* ---- Tablet ---- */
+@media (max-width: 990px) {
+  #hero .hero-inner {
+    padding-top: 90px;
+    padding-bottom: 60px;
+  }
+
+  #hero .hero-title {
+    font-size: 44px;
+    line-height: 1.45;
+  }
+
+  #hero .hero-card {
+    margin-top: 64px;
+    padding: 40px;
+  }
+
+  #hero .hero-flag {
+    margin-bottom: 36px;
+  }
+
+  #hero .hero-text {
+    margin-right: 0;
+  }
+
+  #hero .hero-actions {
+    margin-top: 36px;
+  }
+
+  #hero .hero-btn {
+    height: 64px;
+    padding: 0 28px;
+  }
+}
+
+/* ---- Phone ---- */
+@media (max-width: 600px) {
+  #hero .hero-inner {
+    padding-top: 56px;
+  }
+
+  #hero .hero-title {
+    font-size: 32px;
+    line-height: 1.4;
+  }
+
+  #hero .hero-card {
+    padding: 28px;
+  }
+
+  #hero .hero-text {
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  #hero .hero-actions {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  #hero .hero-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* Hero ends here */
+
+
+
+/* ===== German Language course section ===== */
+#german-courses,
+#german-courses *,
+#german-courses *::before,
+#german-courses *::after {
+  box-sizing: border-box;
+}
+
+#german-courses {
+  width: 100%;
+  padding: 84px 0 90px;
+  background: #fff;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#german-courses .german-courses-inner {
+  width: min(1215px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+#german-courses .german-courses-head {
+  margin: 0 auto 54px;
+  text-align: center;
+}
+
+#german-courses .german-courses-head h2 {
+  margin: 0 0 22px;
+  color: #161616;
+  font-size: clamp(28px, 2.35vw, 37px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#german-courses .german-courses-head p {
+  max-width: 850px;
+  margin: 0 auto;
+  color: #111;
+  font-size: clamp(14px, 1.1vw, 17px);
+  line-height: 1.6;
+}
+
+#german-courses .german-course-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  height: 455px;
+  overflow: hidden;
+  border-radius: 9px;
+}
+
+#german-courses .german-course-card {
+  position: relative;
+  min-width: 0;
+  height: 455px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #12251f;
+  border-right: 1px solid rgba(255,255,255,.22);
+  cursor: pointer;
+}
+
+#german-courses .german-course-card:last-child {
+  border-right: 0;
+}
+
+#german-courses .german-course-image {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  transition: transform .65s cubic-bezier(.22,.61,.36,1);
+}
+
+#german-courses .german-course-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(
+    to top,
+    rgba(0, 25, 19, .92) 0%,
+    rgba(0, 25, 19, .62) 36%,
+    rgba(0, 0, 0, .04) 76%
+  );
+  transition: background .45s ease;
+}
+
+#german-courses .german-course-collapsed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 0 28px 27px;
+  transition: opacity .25s ease, transform .45s ease;
+}
+
+#german-courses .german-course-collapsed h3 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(22px, 1.7vw, 29px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+
+#german-courses .german-course-plus {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #222;
+  background: #fff;
+  border-radius: 50%;
+  font-size: 23px;
+  font-weight: 300;
+  line-height: 1;
+  box-shadow: 0 3px 12px rgba(0,0,0,.16);
+  transition: transform .35s ease;
+}
+
+#german-courses .german-course-details {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 52px 30px 31px;
+  color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(0, 25, 19, .95) 0%,
+    rgba(0, 28, 22, .86) 58%,
+    rgba(0, 18, 14, .26) 100%
+  );
+  transform: translateY(100%);
+  transition: transform .55s cubic-bezier(.22,.61,.36,1);
+}
+
+#german-courses .german-course-details h3 {
+  margin: 0 0 48px;
+  font-size: clamp(22px, 1.75vw, 29px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#german-courses .german-course-details p {
+  margin: auto 0 27px;
+  color: #fff;
+  font-size: clamp(15px, 1.12vw, 18px);
+  font-weight: 600;
+  line-height: 1.65;
+  text-shadow: 0 1px 4px rgba(0,0,0,.32);
+}
+
+#german-courses .german-course-link {
+  align-self: flex-start;
+  color: #ed1c24;
+  font-size: clamp(15px, 1.15vw, 18px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color .2s ease, transform .2s ease;
+}
+
+#german-courses .german-course-link:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+#german-courses .german-course-card:hover .german-course-details,
+#german-courses .german-course-card:focus-visible .german-course-details,
+#german-courses .german-course-card.is-active .german-course-details {
+  transform: translateY(0);
+}
+
+#german-courses .german-course-card:hover .german-course-collapsed,
+#german-courses .german-course-card:focus-visible .german-course-collapsed,
+#german-courses .german-course-card.is-active .german-course-collapsed {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+#german-courses .german-course-card:hover .german-course-plus,
+#german-courses .german-course-card:focus-visible .german-course-plus,
+#german-courses .german-course-card.is-active .german-course-plus {
+  transform: rotate(45deg);
+}
+
+#german-courses .german-course-card:hover .german-course-image,
+#german-courses .german-course-card.is-active .german-course-image {
+  transform: scale(1.035);
+}
+
+#german-courses .german-course-card:hover .german-course-shade,
+#german-courses .german-course-card.is-active .german-course-shade {
+  background: rgba(0, 25, 19, .2);
+}
+
+@media (max-width: 990px) {
+  #german-courses {
+    padding: 66px 0 72px;
+  }
+
+  #german-courses .german-courses-head {
+    margin-bottom: 40px;
+  }
+
+  #german-courses .german-course-grid {
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-radius: 8px;
+  }
+
+  #german-courses .german-course-card {
+    height: 410px;
+  }
+
+  #german-courses .german-course-card:nth-child(2) {
+    border-right: 0;
+  }
+
+  #german-courses .german-course-card:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(255,255,255,.22);
+  }
+
+  #german-courses .german-course-details {
+    padding: 50px 27px 28px;
+  }
+
+  #german-courses .german-course-details h3 {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  #german-courses {
+    padding: 52px 0 60px;
+  }
+
+  #german-courses .german-courses-inner {
+    width: min(100% - 24px, 430px);
+  }
+
+  #german-courses .german-courses-head {
+    margin-bottom: 30px;
+  }
+
+  #german-courses .german-courses-head h2 {
+    margin-bottom: 13px;
+    font-size: 26px;
+  }
+
+  #german-courses .german-courses-head p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #german-courses .german-course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #german-courses .german-course-card,
+  #german-courses .german-course-card:nth-child(2) {
+    height: 500px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.25);
+  }
+
+  #german-courses .german-course-card:last-child {
+    border-bottom: 0;
+  }
+
+  #german-courses .german-course-collapsed {
+    padding: 0 30px 28px;
+  }
+
+  #german-courses .german-course-details {
+    padding: 52px 30px 30px;
+  }
+
+  #german-courses .german-course-details h3 {
+    margin-bottom: 27px;
+    font-size: 26px;
+  }
+
+  #german-courses .german-course-details p {
+    margin-bottom: 25px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  #german-courses .german-course-link {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #german-courses .german-course-image,
+  #german-courses .german-course-details,
+  #german-courses .german-course-collapsed,
+  #german-courses .german-course-plus {
+    transition: none;
+  }
+}
+
+
+/* ===== Home About section ===== */
+#home-about,
+#home-about *,
+#home-about *::before,
+#home-about *::after {
+  box-sizing: border-box;
+}
+
+#home-about {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 610px;
+  padding: 0;
+  background: #fff;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#home-about .home-about-bg {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 286px;
+  background: #ffbd3f;
+  z-index: 0;
+}
+
+#home-about .home-about-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 450px;
+  align-items: start;
+  gap: 78px;
+  width: min(1236px, calc(100% - 40px));
+  min-height: 610px;
+  margin: 0 auto;
+}
+
+#home-about .home-about-copy {
+  padding-top: 145px;
+}
+
+#home-about .home-about-copy h2 {
+  max-width: 650px;
+  margin: 0 0 74px;
+  color: #171717;
+  font-size: clamp(32px, 2.55vw, 41px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#home-about .home-about-copy p {
+  max-width: 650px;
+  margin: 0 0 32px;
+  color: #111;
+  font-size: clamp(15px, 1.06vw, 17px);
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+#home-about .home-about-copy p + p {
+  margin-top: 32px;
+}
+
+#home-about .home-about-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 164px;
+  min-height: 53px;
+  margin-top: 12px;
+  padding: 0 25px;
+  color: #fff;
+  background: #231f20;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease;
+}
+
+#home-about .home-about-btn:hover {
+  background: #ed1c24;
+  transform: translateY(-2px);
+}
+
+#home-about .home-about-media {
+  position: relative;
+  height: 530px;
+  margin-top: 72px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+#home-about .home-about-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 990px) {
+  #home-about {
+    min-height: auto;
+    padding: 0 0 58px;
+  }
+
+  #home-about .home-about-bg {
+    height: 260px;
+  }
+
+  #home-about .home-about-inner {
+    grid-template-columns: 1fr 360px;
+    gap: 44px;
+    min-height: auto;
+  }
+
+  #home-about .home-about-copy {
+    padding-top: 105px;
+  }
+
+  #home-about .home-about-copy h2 {
+    margin-bottom: 46px;
+    font-size: 31px;
+  }
+
+  #home-about .home-about-media {
+    height: 460px;
+    margin-top: 54px;
+  }
+}
+
+@media (max-width: 700px) {
+  #home-about .home-about-bg {
+    height: 205px;
+  }
+
+  #home-about .home-about-inner {
+    grid-template-columns: 1fr;
+    width: min(100% - 24px, 520px);
+    gap: 0;
+  }
+
+  #home-about .home-about-copy {
+    padding-top: 72px;
+  }
+
+  #home-about .home-about-copy h2 {
+    margin-bottom: 30px;
+    font-size: 29px;
+  }
+
+  #home-about .home-about-copy p {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  #home-about .home-about-media {
+    height: 430px;
+    margin-top: 24px;
+    border-radius: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home-about .home-about-btn {
+    transition: none;
+  }
+}
+
+/* ===== Home German Journey background card section ===== */
+#home-journey,
+#home-journey *,
+#home-journey *::before,
+#home-journey *::after {
+  box-sizing: border-box;
+}
+
+#home-journey {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 720px;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+  background: #4b3a24;
+}
+
+#home-journey .home-journey-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image: url("Images/hero-background.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+#home-journey .home-journey-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .47) 0%, rgba(0, 0, 0, .28) 50%, rgba(0, 0, 0, .34) 100%);
+  transition: opacity .55s ease;
+}
+
+#home-journey .home-journey-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  width: min(1236px, calc(100% - 40px));
+  min-height: 720px;
+  margin: 0 auto;
+  padding: 70px 0;
+}
+
+#home-journey .home-journey-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(330px, .72fr);
+  align-items: center;
+  width: 100%;
+  min-height: 590px;
+  padding: 78px 72px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 4px;
+  background: rgba(22, 17, 11, .30);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .16);
+  backdrop-filter: blur(1.5px);
+  transition: background-color .65s ease, box-shadow .65s ease, border-color .65s ease, backdrop-filter .65s ease;
+}
+
+#home-journey .home-journey-card.is-scrolled {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+#home-journey .home-journey-copy {
+  max-width: 520px;
+}
+
+#home-journey .home-journey-copy h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(38px, 4vw, 58px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+#home-journey .home-journey-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 176px;
+  min-height: 58px;
+  margin-top: 150px;
+  padding: 0 26px;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+
+#home-journey .home-journey-btn:hover {
+  color: #231f20;
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+#home-journey .home-journey-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+#home-journey .home-journey-ring {
+  position: relative;
+  flex: 0 0 92px;
+  width: 92px;
+  height: 92px;
+  border: 9px solid #ffda55;
+  border-right-color: #287a55;
+  border-radius: 50%;
+  transform: rotate(-42deg);
+}
+
+#home-journey .home-journey-ring span {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .10);
+}
+
+#home-journey .home-journey-stat-copy {
+  min-width: 190px;
+}
+
+#home-journey .home-journey-stat-copy strong {
+  display: block;
+  margin: 0 0 14px;
+  color: #ed1c24;
+  font-size: clamp(45px, 4vw, 64px);
+  font-weight: 500;
+  line-height: 1;
+}
+
+#home-journey .home-journey-stat-copy p {
+  max-width: 250px;
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+@media (max-width: 990px) {
+  #home-journey,
+  #home-journey .home-journey-inner {
+    min-height: 650px;
+  }
+
+  #home-journey .home-journey-inner {
+    width: min(100% - 32px, 760px);
+    padding: 48px 0;
+  }
+
+  #home-journey .home-journey-card {
+    grid-template-columns: 1fr;
+    gap: 70px;
+    min-height: 550px;
+    padding: 58px 48px;
+  }
+
+  #home-journey .home-journey-copy h2 {
+    max-width: 600px;
+    font-size: clamp(34px, 6vw, 50px);
+  }
+
+  #home-journey .home-journey-btn {
+    margin-top: 70px;
+  }
+
+  #home-journey .home-journey-stat {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  #home-journey,
+  #home-journey .home-journey-inner {
+    min-height: 650px;
+  }
+
+  #home-journey .home-journey-backdrop {
+    background-attachment: scroll;
+  }
+
+  #home-journey .home-journey-inner {
+    width: min(100% - 24px, 520px);
+    padding: 28px 0;
+  }
+
+  #home-journey .home-journey-card {
+    gap: 55px;
+    min-height: 590px;
+    padding: 44px 24px;
+  }
+
+  #home-journey .home-journey-copy h2 {
+    font-size: 34px;
+    line-height: 1.18;
+  }
+
+  #home-journey .home-journey-btn {
+    width: 100%;
+    margin-top: 58px;
+  }
+
+  #home-journey .home-journey-stat {
+    gap: 16px;
+  }
+
+  #home-journey .home-journey-ring {
+    flex-basis: 70px;
+    width: 70px;
+    height: 70px;
+    border-width: 7px;
+  }
+
+  #home-journey .home-journey-stat-copy strong {
+    font-size: 46px;
+  }
+
+  #home-journey .home-journey-stat-copy p {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home-journey .home-journey-card,
+  #home-journey .home-journey-btn {
+    transition: none;
+  }
+}
+
+/* Footer starts here */
+
+#site-footer,
+#site-footer *,
+#site-footer *::before,
+#site-footer *::after {
+  box-sizing: border-box;
+}
+ 
+#site-footer {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  background: #000;
+  font-family: "Times New Roman", Times, "Liberation Serif", serif;
+  font-size: 16.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+}
+ 
+#site-footer .gf-inner {
+  max-width: 1236px;
+  margin: 0 auto;
+  padding: 72px 0 0;
+  background: transparent;
+}
+ 
+#site-footer .gf-grid {
+  display: grid;
+  grid-template-columns: 482fr 357fr 420fr 391fr;
+  align-items: start;
+  margin: 0;
+  padding: 0;
+}
+ 
+/* ---- Logo, description, social circles ---- */
+#site-footer .gf-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 44px;
+}
+ 
+#site-footer .gf-logo {
+  display: block;
+  width: 100px;
+  height: 100px;
+  max-width: none;
+  background-color: #fff;
+  margin: 0;
+  object-fit: cover;
+  border-radius: 50%;
+}
+ 
+#site-footer .gf-desc {
+  max-width: 385px;
+  margin: 0;
+  padding: 0;
+  color: #e6e6e6;
+  font-size: 16.8px;
+  line-height: 31.5px;
+}
+ 
+#site-footer .gf-desc:empty {
+  display: none;
+}
+ 
+#site-footer .gf-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+ 
+#site-footer .gf-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  color: #fff;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid #cfcfcf;
+  border-radius: 50%;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+ 
+#site-footer .gf-social-link:hover {
+  background: #ed1c24;
+  border-color: #ed1c24;
+}
+
+#site-footer .gf-social-link:has(.gf-ico-facebook):hover {
+  background: #1877f2;
+  border-color: #1877f2;
+}
+ 
+#site-footer .gf-social-link svg {
+  width: auto;
+  height: 22px;
+  fill: currentColor;
+}
+ 
+/* ---- Company / Legals / Contact ---- */
+#site-footer .gf-col h3 {
+  margin: 2px 0 42px;
+  padding: 0;
+  color: #fff;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+}
+ 
+#site-footer .gf-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20.5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ 
+#site-footer .gf-links li {
+  margin: 0;
+  padding: 0;
+}
+ 
+#site-footer .gf-links a {
+  color: #e6e6e6;
+  font-size: 16.5px;
+  line-height: 24px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+ 
+#site-footer .gf-links a:hover {
+  color: #ed1c24;
+}
+ 
+#site-footer .gf-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 58px;
+  margin: 0;
+  padding: 19px 0 0;
+  list-style: none;
+}
+ 
+#site-footer .gf-contact li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  color: #e6e6e6;
+  font-size: 18.4px;
+  line-height: 27px;
+}
+ 
+#site-footer .gf-contact svg {
+  flex: none;
+  width: 25px;
+  height: 24px;
+  fill: currentColor;
+}
+ 
+#site-footer .gf-contact svg.gf-ico-envelope {
+  width: 26px;
+}
+ 
+#site-footer .gf-contact svg.gf-ico-location-dot {
+  width: 21px;
+}
+ 
+#site-footer .gf-contact a {
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+ 
+#site-footer .gf-contact a:hover {
+  color: #ed1c24;
+}
+ 
+/* ---- Copyright ---- */
+#site-footer .gf-bottom {
+  margin: 72px 0 0;
+  padding: 23px 0 21px;
+  text-align: center;
+  border-top: 1px solid #2b2b2b;
+}
+ 
+#site-footer .gf-bottom p {
+  margin: 0;
+  color: #ddd;
+  font-size: 16.8px;
+  line-height: 24px;
+}
+ 
+@media (max-width: 990px) {
+  .navbar {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  #site-footer .gf-inner {
+    padding: 58px 1.25rem 0;
+  }
+ 
+  #site-footer .gf-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 2rem;
+  }
+ 
+  #site-footer .gf-brand {
+    grid-column: 1 / -1;
+  }
+ 
+  #site-footer .gf-bottom {
+    margin-top: 64px;
+  }
+}
+ 
+@media (max-width: 600px) {
+  #site-footer .gf-grid {
+    grid-template-columns: 1fr;
+  }
+ 
+  #site-footer .gf-col h3 {
+    margin-bottom: 24px;
+  }
+ 
+  #site-footer .gf-contact {
+    gap: 24px;
+    padding-top: 0;
+  }
+}
+
+/* Footer ends here */
+
+/* ===== Home Mission & Vision section ===== */
+#home-mission,
+#home-mission *,
+#home-mission *::before,
+#home-mission *::after {
+  box-sizing: border-box;
+}
+
+#home-mission {
+  width: 100%;
+  padding: 74px 0 86px;
+  background: #fff;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#home-mission .home-mission-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 68px;
+  width: min(1236px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+#home-mission .home-mission-media {
+  height: 620px;
+  overflow: hidden;
+  border-radius: 11px;
+}
+
+#home-mission .home-mission-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+#home-mission .home-mission-copy {
+  padding: 8px 0;
+}
+
+#home-mission .home-mission-copy h2 {
+  margin: 0 0 66px;
+  color: #171717;
+  font-size: clamp(31px, 2.45vw, 40px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#home-mission .home-mission-copy p {
+  max-width: 610px;
+  margin: 0 0 32px;
+  color: #111;
+  font-size: clamp(15px, 1.02vw, 17px);
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+#home-mission .home-mission-copy p + p {
+  margin-top: 31px;
+}
+
+@media (max-width: 990px) {
+  #home-mission {
+    padding: 62px 0 72px;
+  }
+
+  #home-mission .home-mission-inner {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 44px;
+  }
+
+  #home-mission .home-mission-media {
+    height: 520px;
+  }
+
+  #home-mission .home-mission-copy h2 {
+    margin-bottom: 44px;
+    font-size: 31px;
+  }
+
+  #home-mission .home-mission-copy p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 700px) {
+  #home-mission {
+    padding: 52px 0 62px;
+  }
+
+  #home-mission .home-mission-inner {
+    grid-template-columns: 1fr;
+    width: min(100% - 24px, 520px);
+    gap: 34px;
+  }
+
+  #home-mission .home-mission-media {
+    height: 500px;
+    border-radius: 10px;
+  }
+
+  #home-mission .home-mission-copy h2 {
+    margin-bottom: 30px;
+    font-size: 29px;
+  }
+
+  #home-mission .home-mission-copy p {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home-mission .home-mission-media img {
+    transition: none;
+  }
+}
+
+
+/* ===== Home Journey: fixed background with fully transparent content card ===== */
+#home-journey .home-journey-card,
+#home-journey .home-journey-card.is-scrolled {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* ===== Home Why Choose Us section ===== */
+#home-why,
+#home-why *,
+#home-why *::before,
+#home-why *::after {
+  box-sizing: border-box;
+}
+
+#home-why {
+  width: 100%;
+  background: #fff;
+  color: #171717;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#home-why .home-why-inner {
+  width: min(1335px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 68px 0 74px;
+}
+
+#home-why .home-why-heading {
+  text-align: center;
+  margin-bottom: 58px;
+}
+
+#home-why .home-why-heading h2 {
+  margin: 0;
+  font-size: clamp(38px, 3.3vw, 50px);
+  line-height: 1.12;
+  font-weight: 700;
+  color: #111;
+}
+
+#home-why .home-why-heading p {
+  margin: 38px 0 0;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.5;
+  color: #111;
+}
+
+#home-why .home-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+
+#home-why .home-why-card {
+  min-height: 438px;
+  padding: 38px 34px 44px;
+  border-radius: 12px;
+  background: #ffbd3f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#home-why .home-why-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 45px;
+  color: #171717;
+  font-size: 53px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#home-why .home-why-card h3 {
+  width: 100%;
+  max-width: 380px;
+  min-height: 76px;
+  margin: 0;
+  color: #171717;
+  font-size: clamp(25px, 2vw, 30px);
+  line-height: 1.18;
+  font-weight: 700;
+}
+
+#home-why .home-why-card p {
+  width: 100%;
+  max-width: 390px;
+  margin: 48px 0 0;
+  color: #171717;
+  font-size: 17px;
+  line-height: 1.48;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  #home-why .home-why-inner {
+    width: min(100% - 32px, 700px);
+    padding: 58px 0 64px;
+  }
+
+  #home-why .home-why-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  #home-why .home-why-card {
+    min-height: 390px;
+  }
+}
+
+@media (max-width: 600px) {
+  #home-why .home-why-inner {
+    width: min(100% - 24px, 520px);
+    padding: 48px 0 54px;
+  }
+
+  #home-why .home-why-heading {
+    margin-bottom: 38px;
+  }
+
+  #home-why .home-why-heading h2 {
+    font-size: 34px;
+  }
+
+  #home-why .home-why-heading p {
+    margin-top: 24px;
+    font-size: 15px;
+  }
+
+  #home-why .home-why-card {
+    min-height: 360px;
+    padding: 30px 24px 38px;
+  }
+
+  #home-why .home-why-icon {
+    margin-bottom: 30px;
+  }
+
+  #home-why .home-why-card h3 {
+    min-height: auto;
+    font-size: 24px;
+  }
+
+  #home-why .home-why-card p {
+    margin-top: 30px;
+    font-size: 15px;
+  }
+}
+
+/* ===== Home Latest Blogs & Updates section ===== */
+#home-blogs,
+#home-blogs *,
+#home-blogs *::before,
+#home-blogs *::after {
+  box-sizing: border-box;
+}
+
+#home-blogs {
+  width: 100%;
+  background: #fff;
+  color: #171717;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#home-blogs .home-blogs-inner {
+  width: min(1460px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 64px 0 72px;
+}
+
+#home-blogs .home-blogs-heading {
+  text-align: center;
+  margin: 0 auto 54px;
+}
+
+#home-blogs .home-blogs-heading h2 {
+  margin: 0;
+  font-size: clamp(34px, 3vw, 50px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+#home-blogs .home-blogs-heading p {
+  margin: 70px 0 0;
+  font-size: clamp(16px, 1.25vw, 21px);
+  line-height: 1.55;
+}
+
+#home-blogs .home-blogs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+
+#home-blogs .home-blog-card {
+  min-width: 0;
+}
+
+#home-blogs .home-blog-card img {
+  border-radius: 14px;
+}
+
+#home-blogs .home-blog-card > a:first-child {
+  display: block;
+  overflow: hidden;
+  border-radius: 14px;
+  text-decoration: none;
+}
+
+#home-blogs .home-blog-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.67 / 1;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+#home-blogs .home-blog-card > a:first-child:hover img {
+  transform: scale(1.035);
+}
+
+#home-blogs .home-blog-card h3 {
+  margin: 30px 0 0;
+  font-size: clamp(16px, 1.2vw, 20px);
+  line-height: 1.55;
+  font-weight: 700;
+  white-space: pre-line;
+}
+
+#home-blogs .blog-empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 24px;
+  color: #60656d;
+  text-align: center;
+}
+
+/* Blog posts are fetched after page load, so they should remain visible when
+   the page's optional scroll-reveal script has already initialized. */
+.home-blog-card.blog-post-card {
+  opacity: 1;
+  transform: none;
+}
+
+#home-blogs .home-blog-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#home-blogs .home-blog-card h3 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.blog-download-link {
+  color: #171717;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.blog-download-link:hover {
+  color: #ed1c24;
+}
+
+#home-blogs .home-blog-card h3 .blog-download-link {
+  color: #171717;
+}
+
+#home-blogs .home-blog-card h3 .blog-download-link:hover {
+  color: #ed1c24;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  #home-blogs .home-blogs-inner {
+    width: min(100% - 32px, 720px);
+    padding: 54px 0 60px;
+  }
+
+  #home-blogs .home-blogs-heading {
+    margin-bottom: 42px;
+  }
+
+  #home-blogs .home-blogs-heading p {
+    margin-top: 44px;
+  }
+
+  #home-blogs .home-blogs-grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+}
+
+@media (max-width: 520px) {
+  #home-blogs .home-blogs-inner {
+    width: min(100% - 24px, 520px);
+    padding: 44px 0 52px;
+  }
+
+  #home-blogs .home-blogs-heading h2 {
+    font-size: 31px;
+  }
+
+  #home-blogs .home-blogs-heading p {
+    margin-top: 34px;
+    font-size: 15px;
+  }
+
+  #home-blogs .home-blog-card h3 {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+}
+
+/* ===== V7: shared content width + modern motion enhancements ===== */
+@media (min-width: 991px) {
+  .navbar {
+    max-width: 1236px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #german-courses .german-courses-inner,
+  #home-about .home-about-inner,
+  #home-mission .home-mission-inner,
+  #home-why .home-why-inner,
+  #home-blogs .home-blogs-inner {
+    width: min(1236px, calc(100% - 40px));
+  }
+}
+
+/* Smooth, lightweight reveal motion. Content remains fully usable without JS. */
+.v7-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1);
+  will-change: opacity, transform;
+}
+
+.v7-reveal.v7-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.v7-reveal-delay-1 { transition-delay: .08s; }
+.v7-reveal-delay-2 { transition-delay: .16s; }
+.v7-reveal-delay-3 { transition-delay: .24s; }
+.v7-reveal-delay-4 { transition-delay: .32s; }
+
+/* Subtle section and card polish without changing the existing design language. */
+.german-course-card,
+.home-why-card,
+.home-blog-card,
+.home-about-media,
+.home-mission-media {
+  transition: transform .55s cubic-bezier(.22,.61,.36,1), box-shadow .55s ease;
+}
+
+.german-course-card:hover,
+.home-why-card:hover,
+.home-blog-card:hover {
+  transform: translateY(-5px);
+}
+
+.home-about-media:hover,
+.home-mission-media:hover {
+  box-shadow: 0 18px 42px rgba(0,0,0,.10);
+}
+
+.home-journey-btn,
+.home-about-btn,
+.btn-contact,
+.hero-btn,
+.german-course-link {
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+/* On phones, cards enter gently from slightly left of their final position. */
+@media (max-width: 700px) {
+  .german-course-card,
+  .home-why-card,
+  .home-blog-card {
+    opacity: 0;
+    transform: translate3d(-24px, 0, 0);
+    transition: opacity .95s ease, transform 1.05s cubic-bezier(.22,.61,.36,1), box-shadow .45s ease;
+    will-change: opacity, transform;
+  }
+
+  .german-course-card.v7-visible,
+  .home-why-card.v7-visible,
+  .home-blog-card.v7-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .german-course-card:nth-child(2),
+  .home-why-card:nth-child(2),
+  .home-blog-card:nth-child(2) {
+    transition-delay: .12s;
+  }
+
+  .german-course-card:nth-child(3),
+  .home-why-card:nth-child(3),
+  .home-blog-card:nth-child(3) {
+    transition-delay: .24s;
+  }
+
+  .german-course-card:nth-child(4) {
+    transition-delay: .36s;
+  }
+
+  .home-about-media,
+  .home-mission-media {
+    transform: translateY(14px);
+    opacity: .01;
+  }
+
+  .home-about-media.v7-visible,
+  .home-mission-media.v7-visible {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v7-reveal,
+  .german-course-card,
+  .home-why-card,
+  .home-blog-card,
+  .home-about-media,
+  .home-mission-media,
+  .home-about-btn,
+  .home-journey-btn,
+  .btn-contact,
+  .hero-btn,
+  .german-course-link {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+

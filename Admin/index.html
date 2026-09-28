@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Login -->
+  <div class="login-view" id="login-view">
+    <form class="login-card" id="login-form">
+      <h1>Admin login</h1>
+      <label class="field">
+        <span>Admin email</span>
+        <input type="email" id="login-user" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <div class="password-input-wrap">
+          <input type="password" id="login-pass" autocomplete="current-password" required>
+          <button class="password-visibility-toggle" type="button" data-password-target="login-pass" aria-controls="login-pass" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+      </label>
+      <p class="form-error" id="login-error" role="alert"></p>
+      <button class="btn btn-primary btn-block" type="submit">Log in</button>
+    </form>
+  </div>
+
+  <!-- Panel -->
+  <div id="app-view" hidden>
+    <header class="admin-header">
+      <div class="admin-bar">
+        <span class="admin-brand">Admin</span>
+        <button class="admin-menu-toggle" type="button" id="admin-nav-toggle" aria-expanded="false" aria-controls="admin-nav" aria-label="Open admin navigation">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="admin-account-actions">
+          <button class="btn btn-ghost" type="button" id="change-password-open">Change password</button>
+          <button class="btn btn-ghost" type="button" id="logout-btn">Log out</button>
+        </div>
+      </div>
+      <nav class="admin-nav" id="admin-nav" aria-label="Admin sections">
+        <div class="admin-nav-heading">
+          <span>Sections</span>
+          <button class="admin-menu-close" type="button" id="admin-nav-close" aria-label="Close admin navigation">×</button>
+        </div>
+        <button class="tab active" type="button" data-target="home">Home</button>
+        <button class="tab" type="button" data-target="german-language">German Language</button>
+        <button class="tab" type="button" data-target="class-schedule">Class Schedule</button>
+        <button class="tab" type="button" data-target="admission">Admission</button>
+        <button class="tab" type="button" data-target="exam">Exam</button>
+        <button class="tab" type="button" data-target="about">About Us</button>
+        <button class="tab" type="button" data-target="blog">Blog</button>
+        <button class="tab" type="button" data-target="terms">Terms</button>
+        <button class="tab" type="button" data-target="privacy">Privacy</button>
+        <button class="tab" type="button" data-target="contact-us">Contact Us</button>
+        <button class="tab" type="button" data-target="gallery">Gallery</button>
+        <button class="tab" type="button" data-target="messages">Messages</button>
+        <button class="tab" type="button" data-target="registered">Registered</button>
+      </nav>
+    </header>
+    <button class="admin-nav-backdrop" id="admin-nav-backdrop" type="button" aria-label="Close admin navigation" hidden></button>
+
+    <main class="admin-main">
+      <div class="section-toolbar" id="section-toolbar" aria-label="Section actions">
+        <div class="section-toolbar-title" id="section-toolbar-title">Home</div>
+        <div class="section-toolbar-actions">
+          <button class="btn btn-ghost" type="button" id="section-restore">Restore default values</button>
+          <button class="btn btn-primary" type="button" id="section-save">Save</button>
+        </div>
+      </div>
+
+      <section class="panel" id="section-home">
+        <div class="panel-head home-panel-head">
+          <h1>Home</h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="home-restore-defaults">Restore default values</button>
+            <button class="btn btn-primary" type="button" id="home-save-all">Save all Home sections</button>
+          </div>
+        </div>
+        <p class="status home-save-status" id="home-save-status" role="status" aria-live="polite"></p>
+
+        <!-- Hero section: heading and text under the German flag -->
+        <div class="card">
+          <h2>Hero section</h2>
+          <p class="hero-hint">The heading is shown in capital letters on the home page. The middle part is shown in red.</p>
+
+          <div class="hero-preview" aria-hidden="true">
+            <span id="hero-pv-start"></span>
+            <span class="hero-pv-red" id="hero-pv-highlight"></span>
+            <span id="hero-pv-end"></span>
+          </div>
+
+          <label class="field">
+            <span>Heading, first part (white)</span>
+            <input type="text" id="hero-heading-start">
+          </label>
+          <label class="field">
+            <span>Heading, highlighted words (red)</span>
+            <input type="text" id="hero-heading-highlight">
+          </label>
+          <label class="field">
+            <span>Heading, last part (white)</span>
+            <input type="text" id="hero-heading-end">
+          </label>
+          <label class="field">
+            <span>Text under the German flag</span>
+            <textarea id="hero-text" rows="3"></textarea>
+          </label>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="hero-save" hidden>Save</button>
+            <button class="btn btn-ghost" type="button" id="hero-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="hero-status" role="status" hidden></span>
+          </div>
+        </div>
+
+        <!-- Home German course cards: separate from the German Language page editor -->
+        <div class="card home-german-courses-editor">
+          <h2>German Language Course Cards</h2>
+          <p class="hero-hint">Manage the four cards shown below the Home hero. These settings affect the Home page only; the German Language page has its own editor.</p>
+          <label class="field">
+            <span>Section heading</span>
+            <input type="text" id="home-german-heading">
+          </label>
+          <label class="field">
+            <span>Supporting text</span>
+            <textarea id="home-german-subtitle" rows="2"></textarea>
+          </label>
+          <div id="home-german-course-fields" class="home-german-course-grid"></div>
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="home-german-save" hidden>Save course cards</button>
+            <button class="btn btn-ghost" type="button" id="home-german-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="home-german-status" role="status" aria-live="polite" hidden></span>
+          </div>
+        </div>
+
+        <!-- Home About section -->
+        <div class="card home-about-editor">
+          <h2>About section</h2>
+          <p class="hero-hint">Edit the heading, paragraphs, image and button shown below the German Learning Path section.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <input type="text" id="home-about-heading">
+          </label>
+
+          <label class="field">
+            <span>First paragraph</span>
+            <textarea id="home-about-intro" rows="4"></textarea>
+          </label>
+
+          <label class="field">
+            <span>Second paragraph</span>
+            <textarea id="home-about-body" rows="5"></textarea>
+          </label>
+
+          <div class="home-about-admin-media">
+            <img class="home-about-admin-preview" id="home-about-image-preview" alt="About section preview">
+            <div class="home-about-admin-fields">
+              <label class="field">
+                <span>Image link</span>
+                <input type="text" id="home-about-image-url" placeholder="Images/home-about.webp or https://…">
+              </label>
+              <label class="field">
+                <span>Or upload a new image</span>
+                <input type="file" id="home-about-image-file" accept="image/*">
+              </label>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Button text</span>
+              <input type="text" id="home-about-button-text">
+            </label>
+            <label class="field">
+              <span>Button link</span>
+              <input type="text" id="home-about-button-url" placeholder="About_Us/index.html or https://…">
+            </label>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="home-about-save" hidden>Save</button>
+            <button class="btn btn-ghost" type="button" id="home-about-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="home-about-status" role="status" hidden></span>
+          </div>
+        </div>
+
+        <!-- Home Mission & Vision section -->
+        <div class="card home-mission-editor">
+          <h2>Mission &amp; Vision section</h2>
+          <p class="hero-hint">Edit the heading, paragraphs and image shown below the Home About section.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <input type="text" id="home-mission-heading">
+          </label>
+
+          <label class="field">
+            <span>First paragraph</span>
+            <textarea id="home-mission-intro" rows="4"></textarea>
+          </label>
+
+          <label class="field">
+            <span>Second paragraph</span>
+            <textarea id="home-mission-body" rows="7"></textarea>
+          </label>
+
+          <div class="home-mission-admin-media">
+            <img class="home-mission-admin-preview" id="home-mission-image-preview" alt="Mission &amp; Vision section preview">
+            <div class="home-mission-admin-fields">
+              <label class="field">
+                <span>Image link</span>
+                <input type="text" id="home-mission-image-url" placeholder="Images/home-mission.webp or https://…">
+              </label>
+              <label class="field">
+                <span>Or upload a new image</span>
+                <input type="file" id="home-mission-image-file" accept="image/*">
+              </label>
+            </div>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="home-mission-save" hidden>Save</button>
+            <button class="btn btn-ghost" type="button" id="home-mission-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="home-mission-status" role="status" hidden></span>
+          </div>
+        </div>
+
+        <!-- Home German Journey background card section -->
+        <div class="card home-journey-editor">
+          <h2>German Journey section</h2>
+          <p class="hero-hint">Edit the text shown on the background image card near the bottom of the home page.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <textarea id="home-journey-heading" rows="3"></textarea>
+          </label>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Button text</span>
+              <input type="text" id="home-journey-button-text">
+            </label>
+            <label class="field">
+              <span>Button link</span>
+              <input type="text" id="home-journey-button-url" placeholder="Admission/index.html or https://…">
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Student number</span>
+              <input type="text" id="home-journey-number">
+            </label>
+            <label class="field">
+              <span>Student statistic text</span>
+              <textarea id="home-journey-stat-text" rows="3"></textarea>
+            </label>
+          </div>
+
+          <p class="hero-hint">Background image: <strong>Images/hero-background.jpg</strong> (fixed while scrolling).</p>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="home-journey-save" hidden>Save</button>
+            <button class="btn btn-ghost" type="button" id="home-journey-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="home-journey-status" role="status" hidden></span>
+          </div>
+        </div>
+
+        <!-- Home Why Choose Us section -->
+        <div class="card home-why-editor">
+          <h2>Why Choose Us section</h2>
+          <p class="hero-hint">Edit the heading, subtitle and the three benefit cards shown below the German Journey section.</p>
+
+          <label class="field">
+            <span>Section heading</span>
+            <input type="text" id="home-why-heading">
+          </label>
+
+          <label class="field">
+            <span>Section paragraph</span>
+            <textarea id="home-why-subtitle" rows="3"></textarea>
+          </label>
+
+          <div class="home-why-admin-grid">
+            <div class="home-why-admin-card">
+              <h3>Card 1</h3>
+              <label class="field"><span>Heading</span><input type="text" id="home-why-title-1"></label>
+              <label class="field"><span>Paragraph</span><textarea id="home-why-text-1" rows="5"></textarea></label>
+            </div>
+            <div class="home-why-admin-card">
+              <h3>Card 2</h3>
+              <label class="field"><span>Heading</span><input type="text" id="home-why-title-2"></label>
+              <label class="field"><span>Paragraph</span><textarea id="home-why-text-2" rows="5"></textarea></label>
+            </div>
+            <div class="home-why-admin-card">
+              <h3>Card 3</h3>
+              <label class="field"><span>Heading</span><input type="text" id="home-why-title-3"></label>
+              <label class="field"><span>Paragraph</span><textarea id="home-why-text-3" rows="5"></textarea></label>
+            </div>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="home-why-save" hidden>Save</button>
+            <button class="btn btn-ghost" type="button" id="home-why-reset" hidden>Reset form to defaults</button>
+            <span class="status" id="home-why-status" role="status" hidden></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-blog" hidden>
+        <div class="panel-head">
+          <h1>Blog <span class="sub">Shared posts</span></h1>
+        </div>
+        <div class="card blog-editor-card">
+          <h2 id="blog-editor-heading">Add a blog post</h2>
+          <p class="hero-hint">Posts added here appear on the main page, About Us page, German Language page, and Blog page. Add an image URL, attach a PDF, and write the text visitors will click to download it.</p>
+          <form id="blog-post-form">
+            <input type="hidden" id="blog-post-id">
+            <label class="field">
+              <span>Image link</span>
+              <input type="text" id="blog-post-image" placeholder="Images/blog-post.webp or https://…" required>
+            </label>
+            <label class="field">
+              <span>PDF file <small>(required for new posts; optional when editing)</small></span>
+              <input type="file" id="blog-post-pdf" accept="application/pdf,.pdf">
+            </label>
+            <p class="hero-hint blog-current-pdf" id="blog-post-current-pdf" hidden></p>
+            <label class="field">
+              <span>Description / download button text</span>
+              <textarea id="blog-post-description" rows="4" maxlength="600" required></textarea>
+            </label>
+            <div class="save-bar">
+              <button class="btn btn-primary" type="submit" id="blog-post-save">Add blog post</button>
+              <button class="btn btn-ghost" type="button" id="blog-post-cancel" hidden>Cancel edit</button>
+              <span class="status" id="blog-post-status" role="status"></span>
+            </div>
+          </form>
+        </div>
+        <div class="card blog-posts-admin-card">
+          <h2>Published posts</h2>
+          <div id="blog-posts-admin-list" class="blog-posts-admin-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-terms" hidden>
+        <div class="panel-head">
+          <h1>Terms <span class="sub">Public Terms and Conditions page</span></h1>
+        </div>
+        <p class="hero-hint">Edit the paragraphs, age/refund numbers, jurisdiction, and contact details shown under the Terms hero. The page headings remain fixed.</p>
+
+        <form id="terms-form">
+          <div class="card terms-admin-card">
+            <h2>1. User Accounts</h2>
+            <label class="field"><span>Account registration paragraph</span><textarea data-terms-field="account_registration" rows="3" required></textarea></label>
+            <label class="field"><span>Eligibility paragraph (use {minimum_age} for the age)</span><textarea data-terms-field="eligibility" rows="3" required></textarea></label>
+            <label class="field"><span>Minimum age</span><input type="text" inputmode="numeric" data-terms-field="minimum_age" required></label>
+          </div>
+
+          <div class="card terms-admin-card">
+            <h2>2. Course Enrollment and Access</h2>
+            <label class="field"><span>Enrollment and course access</span><textarea data-terms-field="course_access" rows="3" required></textarea></label>
+            <label class="field"><span>No sharing of course materials</span><textarea data-terms-field="materials_sharing" rows="3" required></textarea></label>
+          </div>
+
+          <div class="card terms-admin-card">
+            <h2>3. Payments and Refunds</h2>
+            <label class="field"><span>Payment terms</span><textarea data-terms-field="payment_terms" rows="3" required></textarea></label>
+            <label class="field"><span>Refund policy paragraph (use {refund_days} for the number of days)</span><textarea data-terms-field="refund_policy" rows="3" required></textarea></label>
+            <label class="field"><span>Refund request period, in days</span><input type="text" inputmode="numeric" data-terms-field="refund_days" required></label>
+          </div>
+
+          <div class="card terms-admin-card">
+            <h2>4. User Conduct</h2>
+            <label class="field"><span>Respectful behavior</span><textarea data-terms-field="respectful_behavior" rows="3" required></textarea></label>
+            <label class="field"><span>Prohibited activities</span><textarea data-terms-field="prohibited_activities" rows="3" required></textarea></label>
+          </div>
+
+          <div class="card terms-admin-card">
+            <h2>5–9. Other Terms</h2>
+            <label class="field"><span>Intellectual property rights</span><textarea data-terms-field="intellectual_property" rows="3" required></textarea></label>
+            <label class="field"><span>Limitation of liability</span><textarea data-terms-field="liability" rows="3" required></textarea></label>
+            <label class="field"><span>Privacy and data protection</span><textarea data-terms-field="privacy_protection" rows="3" required></textarea></label>
+            <label class="field"><span>Modifications to terms and services</span><textarea data-terms-field="modifications" rows="3" required></textarea></label>
+            <label class="field"><span>Governing law paragraph (use {jurisdiction} for the location)</span><textarea data-terms-field="governing_law" rows="3" required></textarea></label>
+            <label class="field"><span>Jurisdiction</span><input type="text" data-terms-field="jurisdiction" required></label>
+          </div>
+
+          <div class="card terms-admin-card">
+            <h2>10. Contact Us</h2>
+            <label class="field"><span>Contact introduction</span><textarea data-terms-field="contact_intro" rows="2" required></textarea></label>
+            <div class="grid-2">
+              <label class="field"><span>WhatsApp number</span><input type="text" data-terms-field="whatsapp"></label>
+              <label class="field"><span>Phone number</span><input type="text" data-terms-field="phone"></label>
+              <label class="field"><span>Email address</span><input type="email" data-terms-field="email"></label>
+              <label class="field"><span>Address</span><textarea data-terms-field="address" rows="2"></textarea></label>
+            </div>
+            <label class="field"><span>Closing paragraph</span><textarea data-terms-field="closing_note" rows="3" required></textarea></label>
+          </div>
+
+          <div class="save-bar terms-save-bar">
+            <button class="btn btn-primary" type="submit" id="terms-save">Save Terms</button>
+            <button class="btn btn-ghost" type="button" id="terms-reset">Reset form to defaults</button>
+            <span class="status" id="terms-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" id="section-privacy" hidden>
+        <div class="panel-head">
+          <h1>Privacy <span class="sub">Public Privacy Policy page</span></h1>
+        </div>
+        <p class="hero-hint">Edit the Privacy Policy paragraphs, minimum age, and contact details. Page headings stay fixed. Use {minimum_age} in the children’s privacy paragraph to show the number below.</p>
+
+        <form id="privacy-form">
+          <div class="card privacy-admin-card">
+            <h2>1. Information We Collect</h2>
+            <label class="field"><span>Personal information</span><textarea data-privacy-field="personal_information" rows="3" required></textarea></label>
+            <label class="field"><span>Website and usage information</span><textarea data-privacy-field="usage_information" rows="3" required></textarea></label>
+          </div>
+
+          <div class="card privacy-admin-card">
+            <h2>2–4. Use, Sharing, and Storage</h2>
+            <label class="field"><span>How we use information</span><textarea data-privacy-field="use_information" rows="3" required></textarea></label>
+            <label class="field"><span>Sharing information</span><textarea data-privacy-field="sharing_information" rows="3" required></textarea></label>
+            <label class="field"><span>Cookies and browser storage</span><textarea data-privacy-field="cookies_storage" rows="3" required></textarea></label>
+          </div>
+
+          <div class="card privacy-admin-card">
+            <h2>5–9. Data and Your Choices</h2>
+            <label class="field"><span>Data security</span><textarea data-privacy-field="data_security" rows="3" required></textarea></label>
+            <label class="field"><span>Data retention</span><textarea data-privacy-field="data_retention" rows="3" required></textarea></label>
+            <label class="field"><span>Your privacy choices</span><textarea data-privacy-field="privacy_choices" rows="3" required></textarea></label>
+            <label class="field"><span>Children’s privacy (use {minimum_age} for the age)</span><textarea data-privacy-field="children_privacy" rows="3" required></textarea></label>
+            <label class="field"><span>Minimum age</span><input type="text" inputmode="numeric" data-privacy-field="minimum_age" required></label>
+            <label class="field"><span>Changes to this Privacy Policy</span><textarea data-privacy-field="policy_changes" rows="3" required></textarea></label>
+          </div>
+
+          <div class="card privacy-admin-card">
+            <h2>10. Contact Us</h2>
+            <label class="field"><span>Contact introduction</span><textarea data-privacy-field="contact_intro" rows="2" required></textarea></label>
+            <div class="grid-2">
+              <label class="field"><span>WhatsApp number</span><input type="text" data-privacy-field="whatsapp"></label>
+              <label class="field"><span>Phone number</span><input type="text" data-privacy-field="phone"></label>
+              <label class="field"><span>Email address</span><input type="email" data-privacy-field="email"></label>
+              <label class="field"><span>Address</span><textarea data-privacy-field="address" rows="2"></textarea></label>
+            </div>
+            <label class="field"><span>Closing paragraph</span><textarea data-privacy-field="closing_note" rows="3" required></textarea></label>
+          </div>
+
+          <div class="save-bar terms-save-bar">
+            <button class="btn btn-primary" type="submit" id="privacy-save">Save Privacy Policy</button>
+            <button class="btn btn-ghost" type="button" id="privacy-reset">Reset form to defaults</button>
+            <span class="status" id="privacy-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" id="section-german-language" hidden>
+        <div class="panel-head">
+          <h1>German Language <span class="sub">Course cards</span></h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="german-reset">Reset form to defaults</button>
+            <button class="btn btn-primary" type="button" id="german-save">Save</button>
+          </div>
+        </div>
+
+        <div id="german-course-fields"></div>
+
+        <div class="save-bar">
+          <button class="btn btn-primary" type="button" id="german-save-bottom">Save</button>
+          <button class="btn btn-ghost" type="button" id="german-reset-bottom">Reset form to defaults</button>
+          <span class="status" id="german-status" role="status"></span>
+        </div>
+      </section>
+      <section class="panel" id="section-class-schedule" hidden>
+        <div class="panel-head">
+          <h1>Class Schedule</h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="cs-reset">Reset form to defaults</button>
+            <button class="btn btn-primary" type="button" id="cs-save">Save</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Saturday to Thursday Batch</h2>
+          <p class="hero-hint">Edit the heading and each row's Session, Time and Days shown in this table on the Class Schedule page. Add or remove as many rows as needed. The column headings are fixed.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <input type="text" id="cs-weekday-heading">
+          </label>
+
+          <div id="cs-weekday-rows"></div>
+          <button class="btn btn-ghost cs-add-row" type="button" id="cs-weekday-add-row">Add weekday row</button>
+        </div>
+
+        <div class="card">
+          <h2>Weekend Batch</h2>
+          <p class="hero-hint">Edit the heading and each row's Session, Time and Days shown in this table on the Class Schedule page. Add or remove as many rows as needed. The column headings are fixed.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <input type="text" id="cs-weekend-heading">
+          </label>
+
+          <div id="cs-weekend-rows"></div>
+          <button class="btn btn-ghost cs-add-row" type="button" id="cs-weekend-add-row">Add weekend row</button>
+        </div>
+
+        <div class="save-bar">
+          <button class="btn btn-primary" type="button" id="cs-save-bottom">Save</button>
+          <button class="btn btn-ghost" type="button" id="cs-reset-bottom">Reset form to defaults</button>
+          <span class="status" id="cs-status" role="status"></span>
+        </div>
+      </section>
+      <section class="panel" id="section-admission" hidden>
+        <div class="panel-head">
+          <h1>Admission <span class="sub">Registration Form</span></h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="admission-options-reset">Reset defaults</button>
+            <button class="btn btn-primary" type="button" id="admission-options-save">Save options</button>
+          </div>
+        </div>
+        <div class="card admission-options-editor">
+          <h2>Registration Form Dropdown Options</h2>
+          <p class="hero-hint">Add, edit, or remove dropdown choices on the public Registration Form. Put one choice on each line, then save. Changes apply to the Admission page after it reloads.</p>
+          <div class="admission-options-grid">
+            <label class="field"><span>German Courses</span><textarea id="admission-options-courses" rows="5"></textarea></label>
+            <label class="field"><span>Class Shifts</span><textarea id="admission-options-shifts" rows="5"></textarea></label>
+            <label class="field"><span>Learning Modes</span><textarea id="admission-options-learning-modes" rows="5"></textarea></label>
+            <label class="field"><span>Countries</span><textarea id="admission-options-countries" rows="5"></textarea></label>
+            <label class="field"><span>Reasons for Learning German</span><textarea id="admission-options-reasons" rows="5"></textarea></label>
+            <label class="field"><span>Payment Methods</span><textarea id="admission-options-payment-methods" rows="5"></textarea></label>
+          </div>
+          <div class="save-bar">
+            <span class="status" id="admission-options-status" role="status"></span>
+          </div>
+        </div>
+        <div class="card admission-contact-editor">
+          <h2>Admission “Any questions?” Contact Section</h2>
+          <p class="hero-hint">Update the contact details shown below the Registration Form on the Admission page.</p>
+          <div class="admission-contact-grid">
+            <label class="field"><span>Phone / Cell</span><input type="text" id="admission-contact-phone" placeholder="+880 1717-099770"></label>
+            <label class="field"><span>Available</span><input type="text" id="admission-contact-available" placeholder="Saturday to Friday"></label>
+            <label class="field"><span>Office Days</span><input type="text" id="admission-contact-office-days" placeholder="Saturday to Thursday"></label>
+            <label class="field"><span>Time</span><input type="text" id="admission-contact-time" placeholder="10:00 AM - 07:00 PM"></label>
+            <label class="field"><span>Email</span><input type="email" id="admission-contact-email" placeholder="info.waisbd@gmail.com"></label>
+          </div>
+          <div class="save-bar">
+            <button class="btn btn-ghost" type="button" id="admission-contact-reset">Reset defaults</button>
+            <button class="btn btn-primary" type="button" id="admission-contact-save">Save contact details</button>
+            <span class="status" id="admission-contact-status" role="status"></span>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="section-exam" hidden>
+        <div class="panel-head">
+          <h1>Exam <span class="sub">Exam Fees</span></h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="exam-reset">Reset form to defaults</button>
+            <button class="btn btn-primary" type="button" id="exam-save-top">Save</button>
+          </div>
+        </div>
+
+        <div class="card exam-admin-editor">
+          <h2>Exam Fees Cards</h2>
+          <p class="hero-hint">Edit the four Goethe Zertifikat exam headings and prices shown below the Exam Fees hero on the public Exam page.</p>
+
+          <div class="exam-admin-grid">
+            <div class="exam-admin-card">
+              <h3>Card 1 — A1</h3>
+              <label class="field">
+                <span>Heading</span>
+                <input type="text" id="exam-title-1">
+              </label>
+              <label class="field">
+                <span>Price</span>
+                <input type="text" id="exam-price-1">
+              </label>
+            </div>
+
+            <div class="exam-admin-card">
+              <h3>Card 2 — A2</h3>
+              <label class="field">
+                <span>Heading</span>
+                <input type="text" id="exam-title-2">
+              </label>
+              <label class="field">
+                <span>Price</span>
+                <input type="text" id="exam-price-2">
+              </label>
+            </div>
+
+            <div class="exam-admin-card">
+              <h3>Card 3 — B1</h3>
+              <label class="field">
+                <span>Heading</span>
+                <input type="text" id="exam-title-3">
+              </label>
+              <label class="field">
+                <span>Price</span>
+                <input type="text" id="exam-price-3">
+              </label>
+            </div>
+
+            <div class="exam-admin-card">
+              <h3>Card 4 — B2</h3>
+              <label class="field">
+                <span>Heading</span>
+                <input type="text" id="exam-title-4">
+              </label>
+              <label class="field">
+                <span>Price</span>
+                <input type="text" id="exam-price-4">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card exam-admin-notice-editor">
+          <h2>Exam Notice</h2>
+          <p class="hero-hint">Edit the notice shown underneath the four exam fee cards.</p>
+          <label class="field">
+            <span>Notice text</span>
+            <textarea id="exam-notice" rows="3"></textarea>
+          </label>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="exam-save">Save</button>
+            <button class="btn btn-ghost" type="button" id="exam-reset-bottom">Reset form to defaults</button>
+            <span class="status" id="exam-status" role="status"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Us: everything on the public About Us page (main content + gallery) plus the site-wide footer -->
+      <section class="panel" id="section-about" hidden>
+        <div class="panel-head">
+          <h1>About Us</h1>
+        </div>
+
+        <!-- ===== Section 1: About Us ===== -->
+        <h2 class="section-divider" id="about-section-1-heading">Section 1 &mdash; About Us</h2>
+        <p class="hero-hint">Everything shown in the main content area of the public About Us page: the heading, the three years, the two paragraphs and the three gallery photos.</p>
+
+        <!-- About Us Main Section: heading, years, paragraphs and gallery shown on the public About Us page -->
+        <div class="card about-us-main-editor-card">
+          <h2>About Us Main Section</h2>
+          <p class="hero-hint">Edit the heading, the three year numbers, the two paragraphs and the three gallery photos shown on the public About Us page, under the hero.</p>
+
+          <label class="field">
+            <span>Heading</span>
+            <input type="text" id="about-main-heading">
+          </label>
+
+          <div class="about-us-years-admin-grid">
+            <label class="field"><span>Year 1</span><input type="text" id="about-main-year-1"></label>
+            <label class="field"><span>Year 2</span><input type="text" id="about-main-year-2"></label>
+            <label class="field"><span>Year 3</span><input type="text" id="about-main-year-3"></label>
+          </div>
+
+          <label class="field">
+            <span>First paragraph</span>
+            <textarea id="about-main-paragraph-1" rows="5"></textarea>
+          </label>
+
+          <label class="field">
+            <span>Second paragraph</span>
+            <textarea id="about-main-paragraph-2" rows="4"></textarea>
+          </label>
+
+          <div class="about-main-gallery-grid">
+            <div class="about-main-gallery-card">
+              <h3>Photo 1</h3>
+              <img class="about-main-gallery-preview" id="about-main-gallery-1-preview" alt="Photo 1 preview">
+              <label class="field"><span>Image link</span><input type="text" id="about-main-gallery-1-url" placeholder="Images/about-gallery-1.webp or https://…"></label>
+              <label class="field"><span>Or upload a new image</span><input type="file" id="about-main-gallery-1-file" accept="image/*"></label>
+            </div>
+            <div class="about-main-gallery-card">
+              <h3>Photo 2</h3>
+              <img class="about-main-gallery-preview" id="about-main-gallery-2-preview" alt="Photo 2 preview">
+              <label class="field"><span>Image link</span><input type="text" id="about-main-gallery-2-url" placeholder="Images/about-gallery-2.webp or https://…"></label>
+              <label class="field"><span>Or upload a new image</span><input type="file" id="about-main-gallery-2-file" accept="image/*"></label>
+            </div>
+            <div class="about-main-gallery-card">
+              <h3>Photo 3</h3>
+              <img class="about-main-gallery-preview" id="about-main-gallery-3-preview" alt="Photo 3 preview">
+              <label class="field"><span>Image link</span><input type="text" id="about-main-gallery-3-url" placeholder="Images/about-gallery-3.webp or https://…"></label>
+              <label class="field"><span>Or upload a new image</span><input type="file" id="about-main-gallery-3-file" accept="image/*"></label>
+            </div>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn btn-primary" type="button" id="about-main-save">Save</button>
+            <button class="btn btn-ghost" type="button" id="about-main-reset">Reset form to defaults</button>
+            <span class="status" id="about-main-status" role="status"></span>
+          </div>
+        </div>
+
+        <!-- ===== Section 2: Footer ===== -->
+        <h2 class="section-divider" id="about-section-2-heading">Section 2 &mdash; Footer</h2>
+        <p class="hero-hint">The logo, description, social links, contact details and copyright line shown in the footer on every page of the site.</p>
+
+        <div class="panel-head">
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="reset-btn">Reset form to defaults</button>
+            <button class="btn btn-primary" type="button" id="save-top">Save</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Logo &amp; description</h2>
+          <div class="logo-row">
+            <img class="logo-preview" id="logo-preview" alt="Logo preview">
+            <div class="logo-fields">
+              <label class="field">
+                <span>Logo image link</span>
+                <input type="text" id="logo-url" placeholder="Images/Goalguide-logo.webp or https://…">
+              </label>
+              <label class="field">
+                <span>Or upload a new logo</span>
+                <input type="file" id="logo-file" accept="image/*">
+              </label>
+            </div>
+          </div>
+          <label class="field">
+            <span>Text under the logo</span>
+            <textarea id="description" rows="4"></textarea>
+          </label>
+        </div>
+
+        <div class="card">
+          <h2>Social media links</h2>
+          <div class="grid-2">
+            <label class="field"><span>Facebook</span><input type="text" id="soc-facebook" placeholder="https://facebook.com/…"></label>
+            <label class="field"><span>YouTube</span><input type="text" id="soc-youtube" placeholder="https://youtube.com/…"></label>
+            <label class="field"><span>Instagram (optional)</span><input type="text" id="soc-instagram" placeholder="https://instagram.com/…"></label>
+            <label class="field"><span>X / Twitter (optional)</span><input type="text" id="soc-x" placeholder="https://x.com/…"></label>
+            <label class="field"><span>TikTok (optional)</span><input type="text" id="soc-tiktok" placeholder="https://tiktok.com/@…"></label>
+            <label class="field"><span>LinkedIn (optional)</span><input type="text" id="soc-linkedin" placeholder="https://linkedin.com/…"></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Contact column</h2>
+          <label class="field">
+            <span>Column title</span>
+            <input type="text" id="contact-title">
+          </label>
+          <div class="grid-2">
+            <label class="field"><span>WhatsApp number</span><input type="text" id="whatsapp"></label>
+            <label class="field"><span>Phone number</span><input type="text" id="phone"></label>
+            <label class="field"><span>Email</span><input type="text" id="email"></label>
+          </div>
+          <label class="field">
+            <span>Address</span>
+            <textarea id="address" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="card">
+          <h2>Copyright line</h2>
+          <label class="field">
+            <span>Text</span>
+            <input type="text" id="copyright">
+          </label>
+        </div>
+
+        <div class="save-bar">
+          <button class="btn btn-primary" type="button" id="save-btn">Save</button>
+          <span class="status" id="save-status" role="status"></span>
+        </div>
+      </section>
+
+      <section class="panel" id="section-contact-us" hidden>
+        <div class="panel-head">
+          <h1>Contact Us <span class="sub">Public contact page</span></h1>
+          <button class="btn btn-primary" type="button" id="contact-page-save">Save Contact Page</button>
+        </div>
+        <div class="card contact-page-admin-editor">
+          <h2>Map, Contact Details &amp; Social Links</h2>
+          <p class="hero-hint">These values appear on the Contact Us page. For the map, paste the Google Maps embed URL from the iframe’s src attribute.</p>
+          <label class="field"><span>Google Maps embed URL</span><textarea id="contact-page-map" rows="3"></textarea></label>
+          <div class="contact-page-admin-grid">
+            <label class="field"><span>WhatsApp number</span><input type="text" id="contact-page-whatsapp"></label>
+            <label class="field"><span>Mobile / Phone number</span><input type="text" id="contact-page-phone"></label>
+            <label class="field"><span>Email</span><input type="email" id="contact-page-email"></label>
+            <label class="field"><span>Address</span><textarea id="contact-page-address" rows="2"></textarea></label>
+            <label class="field"><span>Facebook link</span><input type="url" id="contact-page-facebook"></label>
+            <label class="field"><span>Messenger link</span><input type="url" id="contact-page-messenger" placeholder="https://m.me/yourpage"><small>Paste your Messenger link or Facebook Page link for the floating Messenger button.</small></label>
+            <label class="field"><span>YouTube link</span><input type="url" id="contact-page-youtube"></label>
+          </div>
+          <div class="save-bar"><span class="status" id="contact-page-status" role="status"></span></div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-gallery" hidden>
+        <div class="panel-head">
+          <h1>Gallery <span class="sub">Images and categories</span></h1>
+          <button class="btn btn-primary" type="button" id="gallery-save">Save Gallery</button>
+        </div>
+        <div class="card gallery-admin-card">
+          <h2>Manage Gallery Images</h2>
+          <p class="hero-hint">Choose a standard or custom category. Add an image URL or upload an image file. Empty categories stay hidden from the public Gallery page.</p>
+
+          <div class="gallery-admin-category-row">
+            <label class="field"><span>Image category</span><select id="gallery-category-select" required></select></label>
+            <label class="field"><span>Add a custom category</span><div class="gallery-admin-add-category"><input type="text" id="gallery-category-new" maxlength="50" placeholder="e.g. Graduation"><button class="btn btn-ghost" type="button" id="gallery-category-add">Add category</button></div></label>
+          </div>
+
+          <div class="gallery-admin-add-image">
+            <label class="field"><span>Image URL</span><input type="url" id="gallery-image-url" placeholder="https://example.com/image.jpg"></label>
+            <label class="field"><span>Or upload an image</span><input type="file" id="gallery-image-file" accept="image/*"></label>
+            <label class="field"><span>Image description (optional)</span><input type="text" id="gallery-image-alt" maxlength="160" placeholder="Describe the photo"></label>
+            <button class="btn btn-ghost" type="button" id="gallery-image-add">Add image</button>
+          </div>
+          <p class="status" id="gallery-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="card gallery-admin-card">
+          <h2>Current Images</h2>
+          <div id="gallery-admin-list" class="gallery-admin-list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-messages" hidden>
+        <div class="panel-head">
+          <h1>Messages <span class="sub">Contact Us inbox</span></h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="messages-refresh">Refresh</button>
+          </div>
+        </div>
+        <div class="card messages-inbox-card">
+          <p class="status" id="messages-status" role="status" aria-live="polite"></p>
+          <div class="messages-list" id="messages-list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-registered" hidden>
+        <div class="panel-head">
+          <h1>Registered <span class="sub">Admission submissions</span></h1>
+          <div class="head-actions"><button class="btn btn-ghost" type="button" id="registered-refresh">Refresh</button></div>
+        </div>
+        <div class="card registered-inbox-card">
+          <form class="registered-search" id="registered-search-form">
+            <label class="field" for="registered-id-search"><span>Find registration by unique ID</span><input id="registered-id-search" type="search" placeholder="e.g. GG-1A2B3C4D5E6F7A8B" autocomplete="off"></label>
+            <button class="btn btn-primary" type="submit">Search</button>
+            <button class="btn btn-ghost" type="button" id="registered-search-clear">Show all</button>
+          </form>
+          <p class="status" id="registered-status" role="status" aria-live="polite"></p>
+          <div class="registered-list" id="registered-list"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <dialog class="admin-password-dialog" id="password-dialog">
+      <form id="password-change-form">
+        <h2>Change password</h2>
+        <p class="hero-hint" id="password-account-email"></p>
+        <label class="field"><span>Current password</span><div class="password-input-wrap"><input type="password" id="password-current" autocomplete="current-password" required><button class="password-visibility-toggle" type="button" data-password-target="password-current" aria-controls="password-current" aria-label="Show password" aria-pressed="false">Show</button></div></label>
+        <label class="field"><span>New password</span><div class="password-input-wrap"><input type="password" id="password-new" minlength="8" autocomplete="new-password" required><button class="password-visibility-toggle" type="button" data-password-target="password-new" aria-controls="password-new" aria-label="Show password" aria-pressed="false">Show</button></div></label>
+        <label class="field"><span>Confirm new password</span><div class="password-input-wrap"><input type="password" id="password-confirm" minlength="8" autocomplete="new-password" required><button class="password-visibility-toggle" type="button" data-password-target="password-confirm" aria-controls="password-confirm" aria-label="Show password" aria-pressed="false">Show</button></div></label>
+        <p class="form-error" id="password-change-status" role="status" aria-live="polite"></p>
+        <div class="head-actions">
+          <button class="btn btn-ghost" type="button" id="password-dialog-cancel">Cancel</button>
+          <button class="btn btn-primary" type="submit" id="password-change-submit">Update password</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=20260928-registration-details-groups"></script>
+</body>
+</html>

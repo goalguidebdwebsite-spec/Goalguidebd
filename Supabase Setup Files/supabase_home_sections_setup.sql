@@ -1,0 +1,3 @@
+-- Retired setup file. Run supabase_home_complete_setup.sql instead.
+-- The complete setup creates and secures all Home settings tables, including
+-- the Journey settings that this older file used to create.
