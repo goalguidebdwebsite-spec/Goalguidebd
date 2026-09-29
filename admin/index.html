@@ -59,6 +59,7 @@
         <button class="tab" type="button" data-target="gallery">Gallery</button>
         <button class="tab" type="button" data-target="messages">Messages</button>
         <button class="tab" type="button" data-target="registered">Registered</button>
+        <button class="tab" type="button" data-target="help">Help</button>
       </nav>
     </header>
     <button class="admin-nav-backdrop" id="admin-nav-backdrop" type="button" aria-label="Close admin navigation" hidden></button>
@@ -854,6 +855,95 @@
           </form>
           <p class="status" id="registered-status" role="status" aria-live="polite"></p>
           <div class="registered-list" id="registered-list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="section-help" hidden aria-labelledby="help-title">
+        <div class="panel-head">
+          <h1 id="help-title">Help <span class="sub">Admin guide</span></h1>
+        </div>
+        <div class="card help-intro">
+          <h2>Update your website content</h2>
+          <p>Use this guide to find the right admin section, make an edit, and publish it. Content you save is stored in Supabase and used by the public website.</p>
+          <ol class="help-steps">
+            <li><strong>Choose a section.</strong> Use the navigation tabs. On a phone, open the menu with the button at the top.</li>
+            <li><strong>Edit the fields.</strong> Each section controls the content listed below. Check image links, email addresses, and prices before saving.</li>
+            <li><strong>Save and wait.</strong> Use the Save button below the navigation and wait for a successful status message. Some sections have their own add, upload, or save controls.</li>
+            <li><strong>Review the public page.</strong> Open that page and refresh it to confirm the change looks right on desktop and mobile.</li>
+          </ol>
+          <p class="help-note"><strong>Restore defaults</strong> puts default values back into the current form. On Home, Admission, and other editable sections, save afterward if you want those defaults published. It can replace edits that have not been saved yet.</p>
+        </div>
+
+        <div class="help-grid">
+          <article class="card help-card">
+            <h2>Home</h2>
+            <p>Edits the home hero, four German course cards, About section, Mission &amp; Vision, German Journey, and Why Choose Us cards.</p>
+            <p>Use <strong>Save all Home sections</strong> to publish the Home fields together. The course cards here are separate from the German Language page cards.</p>
+          </article>
+          <article class="card help-card">
+            <h2>German Language</h2>
+            <p>Edits the four A1, A2, B1, and B2 course cards on the German Language overview page, including image, title, duration, fee, description, and destination link.</p>
+            <p>Duration, fee, and description also update the matching A1–B2 course detail page. Choose an image link or upload an image, then save. Home page course cards are managed separately under Home.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Class Schedule</h2>
+            <p>Edits the Saturday to Thursday and Weekend batch headings and rows. Each row has a session, time, and days.</p>
+            <p>Use <strong>Add weekday row</strong> or <strong>Add weekend row</strong> to add a row. Remove a row with its remove control, then save the schedule.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Admission</h2>
+            <p>Edits the choices in the public registration form and the phone, availability, office days, time, and email in the “Any questions?” section.</p>
+            <p>Put one dropdown choice on each line. Save the options and contact details; the top action saves both groups.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Exam</h2>
+            <p>Edits the A1, A2, B1, and B2 exam fee card headings and prices, plus the notice below the cards.</p>
+            <p>Review each level and price carefully before saving.</p>
+          </article>
+          <article class="card help-card">
+            <h2>About Us</h2>
+            <p>Edits the About Us page heading, year figures, paragraphs, and three photos. This section also contains the site-wide footer editor.</p>
+            <p>Footer changes appear across the website. Use an image link or upload a new image, then save the matching section.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Blog</h2>
+            <p>Add or edit shared posts shown on Home, About Us, German Language, and Blog pages. Provide an image, attach a PDF for a new post, and enter the description visitors click to download it.</p>
+            <p>Submit the form to publish. Use the published-post controls to edit or remove a post.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Terms and Privacy</h2>
+            <p>Update the text, contact details, and supported values on their public pages. Keep the provided replacement markers exactly as written, such as <code>{minimum_age}</code>, <code>{refund_days}</code>, and <code>{jurisdiction}</code>.</p>
+            <p>Submit the form to save changes.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Contact Us</h2>
+            <p>Edits the Contact Us page map, WhatsApp number, phone, email, address, Facebook, Messenger, and YouTube links.</p>
+            <p>The WhatsApp and Messenger links also control the floating contact buttons shown across the public pages. For the map, use the Google Maps embed URL.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Gallery</h2>
+            <p>Choose a category or create one, then add an image URL or upload an image and enter an optional description. Add the image, then save the gallery.</p>
+            <p>Use the controls on a listed image to remove it. Empty categories are not shown on the public Gallery page.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Messages</h2>
+            <p>Shows messages submitted through the Contact Us form. Select <strong>Refresh</strong> to load the latest messages. Use a message’s remove control only when you no longer need that record.</p>
+          </article>
+          <article class="card help-card">
+            <h2>Registered</h2>
+            <p>Shows public admission form submissions. Search by the unique registration ID, or choose <strong>Show all</strong>. Use <strong>Refresh</strong> to load recent submissions.</p>
+          </article>
+        </div>
+
+        <div class="card help-guidelines">
+          <h2>Good editing habits</h2>
+          <ul>
+            <li>Make one group of related edits at a time and wait for the saved confirmation before leaving the section.</li>
+            <li>For links, use the complete web address beginning with <code>https://</code>. For site images, keep the correct file name and capitalization.</li>
+            <li>Preview the public page after publishing. Check that uploaded images load and contact links open the intended account.</li>
+            <li>Keep the admin password private. Do not put passwords, private keys, or sensitive personal information into public page text.</li>
+          </ul>
+          <p class="help-note">If a page section or field is not listed in its admin editor, that content is currently fixed in the page files rather than editable from this panel.</p>
         </div>
       </section>
 

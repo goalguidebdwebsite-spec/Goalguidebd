@@ -202,7 +202,8 @@ const SECTION_ACTIONS = {
   "contact-us": { title: "Contact Us", save: ["contact-page-save"], restore: null, saveText: "Save Contact Page" },
   gallery: { title: "Gallery", save: ["gallery-save"], restore: null, saveText: "Save Gallery" },
   messages: { title: "Messages", save: ["messages-refresh"], restore: null, saveText: "Refresh messages", saveClass: "btn-ghost" },
-  registered: { title: "Registered", save: ["registered-refresh"], restore: null, saveText: "Refresh registrations", saveClass: "btn-ghost" }
+  registered: { title: "Registered", save: ["registered-refresh"], restore: null, saveText: "Refresh registrations", saveClass: "btn-ghost" },
+  help: { title: "Help", save: null, restore: null }
 };
 
 function invokeSectionAction(action) {

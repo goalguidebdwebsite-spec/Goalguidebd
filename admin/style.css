@@ -650,6 +650,80 @@ button:focus-visible {
   display: none;
 }
 
+.help-intro {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: linear-gradient(135deg, #fff 0%, #fff7f7 100%);
+  border-color: #f2dada;
+}
+
+.help-intro h2,
+.help-card h2,
+.help-guidelines h2 {
+  margin: 0 0 .65rem;
+  color: var(--ink);
+}
+
+.help-intro > p,
+.help-card p,
+.help-guidelines li {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.help-steps,
+.help-guidelines ul {
+  display: grid;
+  gap: .65rem;
+  padding-left: 1.35rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.help-steps strong,
+.help-card strong,
+.help-note strong {
+  color: var(--ink);
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.help-card {
+  margin: 0;
+  padding: 1.25rem;
+}
+
+.help-card p:last-child,
+.help-intro > p:last-child,
+.help-guidelines p:last-child {
+  margin-bottom: 0;
+}
+
+.help-note {
+  margin-top: 1rem;
+  padding: .85rem 1rem;
+  color: #5b4a20 !important;
+  background: #fff8df;
+  border-radius: 10px;
+}
+
+.help-card code,
+.help-guidelines code {
+  padding: .1rem .3rem;
+  color: #394150;
+  background: #f0f2f5;
+  border-radius: 5px;
+}
+
+@media (max-width: 720px) {
+  .help-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .section-toolbar-actions {
   display: flex;
   justify-content: flex-end;
