@@ -745,12 +745,13 @@ button:focus-visible {
   letter-spacing: -.02em;
 }
 
-.admin-brand-logo {
-  width: 42px;
-  height: 42px;
-  flex: none;
-  object-fit: contain;
+.admin-brand::before {
+  width: .65rem;
+  height: .65rem;
+  content: "";
+  background: var(--red);
   border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(237, 28, 36, .1);
 }
 
 .admin-nav {
