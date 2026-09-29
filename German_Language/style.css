@@ -976,19 +976,17 @@ body {
   #home-blogs .home-blogs-heading h2 { font-size: 31px; }
   #home-blogs .home-blogs-heading p { margin-top: 34px; font-size: 15px; }
   #home-blogs .home-blog-card h3 { margin-top: 20px; font-size: 16px; }
+}
 
-  .german-course-card,
-  .home-blog-card {
-    opacity: 0;
-    transform: translate3d(-24px, 0, 0);
-    transition: opacity .95s ease, transform 1.05s cubic-bezier(.22,.61,.36,1), box-shadow .45s ease;
-    will-change: opacity, transform;
+@media (max-width: 700px) {
+  .v7-reveal {
+    transition-duration: .36s;
+    transition-timing-function: cubic-bezier(.22,.61,.36,1);
   }
-  .german-course-card.v7-visible,
-  .home-blog-card.v7-visible { opacity: 1; transform: translate3d(0, 0, 0); }
-  .german-course-card:nth-child(2), .home-blog-card:nth-child(2) { transition-delay: .12s; }
-  .german-course-card:nth-child(3), .home-blog-card:nth-child(3) { transition-delay: .24s; }
-  .german-course-card:nth-child(4) { transition-delay: .36s; }
+  .v7-reveal-delay-1 { transition-delay: .04s; }
+  .v7-reveal-delay-2 { transition-delay: .08s; }
+  .v7-reveal-delay-3 { transition-delay: .12s; }
+  .v7-reveal-delay-4 { transition-delay: .16s; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -999,5 +997,12 @@ body {
   .german-course-link {
     transition: none !important;
     transform: none !important;
+  }
+}
+
+@media (hover: none) {
+  .german-course-card:hover,
+  .home-blog-card:hover {
+    transform: none;
   }
 }

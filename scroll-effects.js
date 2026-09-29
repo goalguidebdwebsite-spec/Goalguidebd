@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const selector = [
+  const selectors = [
     ".german-course-card",
     ".home-blog-card",
     ".home-why-card",
@@ -18,7 +18,15 @@
     ".course-detail-media",
     ".course-meta",
     ".course-extra-copy"
-  ].join(",");
+  ];
+
+  // The German Language overview has its own observer for the Journey copy
+  // and statistics. Avoid animating their parent at the same time.
+  const pagePath = window.location.pathname.replace(/index\.html$/i, "").replace(/\/+$/, "");
+  const isGermanOverview = pagePath.split("/").pop().toLowerCase() === "german_language";
+  const selector = selectors
+    .filter((item) => !(isGermanOverview && item === ".home-journey-card"))
+    .join(",");
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion || !("IntersectionObserver" in window)) return;

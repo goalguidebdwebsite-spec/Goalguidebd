@@ -581,8 +581,7 @@ navLinks.forEach((link) => {
     "#german-courses",
     "#home-journey .home-journey-copy",
     "#home-journey .home-journey-stat",
-    "#home-blogs .home-blogs-heading",
-    "#home-blogs .home-blog-card"
+    "#home-blogs .home-blogs-heading"
   ];
 
   const decorate = (elements) => {
@@ -594,10 +593,7 @@ navLinks.forEach((link) => {
     });
   };
 
-  const collect = () => [
-    ...document.querySelectorAll(selectors.join(",")),
-    ...document.querySelectorAll("#german-courses .german-course-card")
-  ];
+  const collect = () => [...document.querySelectorAll(selectors.join(","))];
 
   const targets = collect();
   if (!targets.length) return;
@@ -608,24 +604,17 @@ navLinks.forEach((link) => {
     return;
   }
 
+  const isMobile = window.matchMedia("(max-width: 700px)").matches;
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       entry.target.classList.add("v7-visible");
       obs.unobserve(entry.target);
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+  }, {
+    threshold: isMobile ? 0.01 : 0.12,
+    rootMargin: isMobile ? "0px 0px 2% 0px" : "0px 0px -8% 0px"
+  });
 
   targets.forEach((el) => observer.observe(el));
-
-  const grid = $("german-courses-grid");
-  if (grid) {
-    const mutationObserver = new MutationObserver(() => {
-      const cards = [...grid.querySelectorAll(".german-course-card:not(.v7-reveal)")];
-      if (!cards.length) return;
-      decorate(cards);
-      cards.forEach((el) => observer.observe(el));
-    });
-    mutationObserver.observe(grid, { childList: true });
-  }
 })();
