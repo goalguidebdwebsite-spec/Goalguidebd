@@ -241,7 +241,7 @@ body {
   overflow: hidden;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
-    url("../Images/german-hero-bg.jpg");
+    url("../Images/German-hero-bg.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

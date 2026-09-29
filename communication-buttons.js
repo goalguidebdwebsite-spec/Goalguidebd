@@ -37,8 +37,10 @@
     try {
       const url = new URL(/^https?:\/\//i.test(input) ? input : "https://" + input);
       if (url.protocol !== "https:" && url.protocol !== "http:") return "https://www.messenger.com/";
-      const host = url.hostname.toLowerCase().replace(/^(www|web|m)\./, "");
-      if (host === "m.me" || host === "messenger.com") return url.href;
+      const hostname = url.hostname.toLowerCase();
+      if (hostname === "m.me") return url.href;
+      const host = hostname.replace(/^(www|web)\./, "");
+      if (host === "messenger.com") return url.href;
       if (host !== "facebook.com" && host !== "fb.com") return "https://www.messenger.com/";
 
       if (url.pathname.toLowerCase().endsWith("profile.php")) {

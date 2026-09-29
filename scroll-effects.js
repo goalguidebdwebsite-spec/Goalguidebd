@@ -22,6 +22,7 @@
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion || !("IntersectionObserver" in window)) return;
+  const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
   const observed = new WeakSet();
   let sequence = 0;
@@ -33,8 +34,8 @@
       activeObserver.unobserve(entry.target);
     });
   }, {
-    threshold: 0.08,
-    rootMargin: "0px 0px -6% 0px"
+    threshold: isMobile ? 0.01 : 0.08,
+    rootMargin: isMobile ? "0px 0px 2% 0px" : "0px 0px -6% 0px"
   });
 
   function watch(element) {
