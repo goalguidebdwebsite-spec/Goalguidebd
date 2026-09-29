@@ -22,8 +22,8 @@ const navLinks = document.querySelectorAll(".nav-links a");
 
   function render(content) {
     const values = normalize(content);
-    const emailLink = document.getElementById("admission-contact-email");
-    const whatsappLink = document.getElementById("admission-contact-whatsapp");
+    const emailLink = document.getElementById("admission-notice-email");
+    const whatsappLink = document.getElementById("admission-notice-whatsapp");
     if (!emailLink || !whatsappLink) return;
 
     emailLink.textContent = values.email;
