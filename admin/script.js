@@ -189,63 +189,13 @@ window.matchMedia("(min-width: 721px)").addEventListener("change", (event) => {
   if (event.matches) setAdminNavOpen(false);
 });
 
-const SECTION_ACTIONS = {
-  home: { title: "Home", save: () => $("home-save-all").click(), restore: () => $("home-restore-defaults").click(), saveText: "Save all Home sections" },
-  "german-language": { title: "German Language", save: ["german-save"], restore: ["german-reset"] },
-  "class-schedule": { title: "Class Schedule", save: ["cs-save"], restore: ["cs-reset"] },
-  admission: { title: "Admission", save: ["admission-options-save", "admission-contact-save"], restore: ["admission-options-reset", "admission-contact-reset"] },
-  exam: { title: "Exam", save: ["exam-save"], restore: ["exam-reset"] },
-  about: { title: "About Us", save: ["about-main-save", "save-btn"], restore: ["about-main-reset", "reset-btn"] },
-  blog: { title: "Blog", save: () => $("blog-post-form").requestSubmit(), restore: () => $("blog-post-cancel").click(), saveText: "Save blog post", restoreText: "Clear form" },
-  terms: { title: "Terms", save: () => $("terms-form").requestSubmit(), restore: ["terms-reset"], saveText: "Save Terms" },
-  privacy: { title: "Privacy", save: () => $("privacy-form").requestSubmit(), restore: ["privacy-reset"], saveText: "Save Privacy Policy" },
-  "contact-us": { title: "Contact Us", save: ["contact-page-save"], restore: null, saveText: "Save Contact Page" },
-  gallery: { title: "Gallery", save: ["gallery-save"], restore: null, saveText: "Save Gallery" },
-  messages: { title: "Messages", save: ["messages-refresh"], restore: null, saveText: "Refresh messages", saveClass: "btn-ghost" },
-  registered: { title: "Registered", save: ["registered-refresh"], restore: null, saveText: "Refresh registrations", saveClass: "btn-ghost" },
-  help: { title: "Help", save: null, restore: null }
-};
-
-function invokeSectionAction(action) {
-  if (typeof action === "function") return action();
-  (action || []).forEach((id) => $(id)?.click());
-}
-
-function updateSectionToolbar(name) {
-  const config = SECTION_ACTIONS[name] || SECTION_ACTIONS.home;
-  const save = $("section-save");
-  const restore = $("section-restore");
-  $("section-toolbar-title").textContent = config.title;
-  save.className = "btn " + (config.saveClass || "btn-primary");
-  save.textContent = config.saveText || "Save";
-  save.hidden = !config.save;
-  restore.textContent = config.restoreText || "Restore default values";
-  restore.hidden = !config.restore;
-  save.onclick = () => invokeSectionAction(config.save);
-  restore.onclick = () => invokeSectionAction(config.restore);
-
-  // The shared strip is the single visible home for save/reset controls.
-  const controlIds = [
-    "home-save-all", "home-restore-defaults", "german-save", "german-save-bottom", "german-reset", "german-reset-bottom",
-    "cs-save", "cs-save-bottom", "cs-reset", "cs-reset-bottom", "admission-options-save", "admission-options-reset",
-    "admission-contact-save", "admission-contact-reset", "exam-save", "exam-save-top", "exam-reset", "exam-reset-bottom",
-    "about-main-save", "about-main-reset", "save-btn", "save-top", "reset-btn", "terms-save", "terms-reset",
-    "privacy-save", "privacy-reset", "contact-page-save", "gallery-save", "messages-refresh", "registered-refresh",
-    "blog-post-save", "blog-post-cancel"
-  ];
-  controlIds.forEach((id) => { const button = $(id); if (button) button.hidden = true; });
-}
-
 function showSection(name) {
   if (name === "registared") name = "registered";
   const target = $("section-" + name) ? name : "home";
   tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.target === target));
   panels.forEach((panel) => (panel.hidden = panel.id !== "section-" + target));
-  updateSectionToolbar(target);
   history.replaceState(null, "", "#" + target);
 }
-
-updateSectionToolbar("home");
 
 tabs.forEach((tab) => tab.addEventListener("click", () => {
   showSection(tab.dataset.target);

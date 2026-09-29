@@ -626,34 +626,31 @@ button:focus-visible {
   flex-wrap: wrap;
 }
 
-/* Shared section actions and responsive admin shell */
-.section-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0 0 1.25rem;
-  padding: 1rem 1.15rem;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: 0 5px 18px rgba(20, 28, 40, .04);
-}
-
-.section-toolbar-title {
-  font-size: 1.45rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.panel > .panel-head {
-  display: none;
-}
-
 .help-intro {
   padding: clamp(1.25rem, 3vw, 2rem);
   background: linear-gradient(135deg, #fff 0%, #fff7f7 100%);
   border-color: #f2dada;
+}
+
+.home-panel-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.75rem;
+}
+
+.home-bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.home-bottom-actions .home-save-status {
+  margin: 0;
 }
 
 .help-intro h2,
@@ -719,15 +716,14 @@ button:focus-visible {
 }
 
 @media (max-width: 720px) {
+  .home-bottom-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .help-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-}
-
-.section-toolbar-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: .65rem;
 }
 
 .admin-header {
@@ -749,13 +745,12 @@ button:focus-visible {
   letter-spacing: -.02em;
 }
 
-.admin-brand::before {
-  width: .65rem;
-  height: .65rem;
-  content: "";
-  background: var(--red);
+.admin-brand-logo {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  object-fit: contain;
   border-radius: 50%;
-  box-shadow: 0 0 0 5px rgba(237, 28, 36, .1);
 }
 
 .admin-nav {
@@ -852,38 +847,6 @@ button:focus-visible {
   .admin-main {
     width: 100%;
     padding: 1rem .75rem 2rem;
-  }
-
-  .section-toolbar {
-    position: static;
-    align-items: stretch;
-    flex-direction: column;
-    gap: .8rem;
-    margin-bottom: 1rem;
-    padding: .9rem;
-    border-radius: 12px;
-  }
-
-  .section-toolbar-title {
-    font-size: 1.25rem;
-  }
-
-  .section-toolbar-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .55rem;
-  }
-
-  .section-toolbar-actions .btn {
-    min-width: 0;
-    padding: .7rem .55rem;
-    font-size: .86rem;
-    line-height: 1.25;
-    white-space: normal;
-  }
-
-  .section-toolbar-actions .btn[hidden] {
-    display: none !important;
   }
 
   .panel-head {
