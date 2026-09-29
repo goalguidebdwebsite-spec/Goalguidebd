@@ -535,7 +535,7 @@ navLinks.forEach((link) => {
             username: fullName,
             unique_id: registrationCode,
             email,
-            "Check here to explore more": "https://goalguidebd.com/Admin/#registared",
+            "Check here to explore more": "https://goalguidebd.com/admin/#registared",
             _subject: "New Goal Guide BD registration - " + registrationCode
           })
         }, "sending the notification to Formspree");

@@ -1,5 +1,5 @@
 -- Goal Guide BD: editable Admission registration form dropdown choices.
--- Run this in the SQL Editor of the Supabase project used by Admin/script.js:
+-- Run this in the SQL Editor of the Supabase project used by admin/script.js:
 -- https://sdzbpsxkhpogbwixhulv.supabase.co
 --
 -- The current admin panel writes with the public anon key, so the settings

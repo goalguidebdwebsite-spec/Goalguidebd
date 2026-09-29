@@ -1,5 +1,5 @@
 -- Goal Guide BD: editable contact details for the Admission page question section.
--- Run this in the SQL Editor of the Supabase project used by Admin/script.js.
+-- Run this in the SQL Editor of the Supabase project used by admin/script.js.
 
 create table if not exists public.admission_contact_settings (
   id integer primary key,
