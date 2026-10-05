@@ -142,6 +142,59 @@ html {
   translate: 0 0;
 }
 
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  #home-blogs .home-blogs-heading h2 {
+    color: transparent;
+    background-image: linear-gradient(90deg, #ed1c24 0%, #ffc33c 25%, #ed1c24 50%, #ffc33c 75%, #ed1c24 100%);
+    background-size: 200% 100%;
+    background-position: 0 50%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: latest-blogs-heading-gradient 3s linear infinite;
+  }
+}
+
+@keyframes latest-blogs-heading-gradient {
+  from { background-position: 0 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home-blogs .home-blogs-heading h2 {
+    color: inherit;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+  }
+}
+
+/* Shared one-second letter wave for each public page's hero heading. */
+.hero-letter-motion-title .hero-title-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hero-letter-motion-title .hero-title-letter {
+  display: inline-block;
+  padding-inline: .015em;
+  transform-origin: center bottom;
+  animation: hero-letter-wave 1s cubic-bezier(.42, 0, .58, 1) infinite;
+  animation-delay: var(--hero-letter-delay, 0ms);
+}
+
+@keyframes hero-letter-wave {
+  0%, 52%, 100% { transform: none; text-shadow: none; }
+  8%, 42% {
+    transform: translateY(-1px) scale(1.01);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .25), 0 0 8px rgba(255, 255, 255, .12);
+  }
+  20%, 30% {
+    transform: translateY(var(--hero-letter-lift, -4px)) rotate(var(--hero-letter-rotate, 0deg)) scale(var(--hero-letter-scale, 1.05));
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .4), 0 0 15px rgba(255, 255, 255, .2);
+  }
+}
+
 /* Fallback left-to-center reveal for browsers without individual translate support. */
 @supports not (translate: 1px 0) {
   .scroll-motion-card:not(.scroll-motion-visible) {
@@ -180,12 +233,18 @@ html {
   .scroll-motion-card,
   .scroll-motion-card:not(.scroll-motion-visible),
   .scroll-motion-card.scroll-motion-visible,
+  .hero-letter-motion-title .hero-title-letter,
   .v7-reveal {
     opacity: 1 !important;
     translate: 0 0 !important;
     transform: none !important;
     transition: none !important;
     will-change: auto;
+  }
+
+  .hero-letter-motion-title .hero-title-letter {
+    animation: none !important;
+    text-shadow: none !important;
   }
 }
 

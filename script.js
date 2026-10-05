@@ -78,6 +78,43 @@ navLinks.forEach((link) => {
   const $ = (id) => document.getElementById(id);
   if (!$("hero")) return;
 
+  function wrapHeroHeadingSegment(element) {
+    if (!element) return "";
+    const text = element.textContent || "";
+    const parts = text.match(/\s+|[^\s]+/gu) || [];
+    const lifts = [6, 3, 5, 2, 7, 4, 3, 6, 2];
+    const rotations = [-2, 1, -1, 2, -1, 1, -2, 1, -1];
+    const scales = [1.1, 1.08, 1.12, 1.06, 1.15, 1.09, 1.07, 1.11, 1.08];
+    const fragment = document.createDocumentFragment();
+    let letterIndex = 0;
+
+    parts.forEach((part) => {
+      if (/^\s+$/u.test(part)) {
+        fragment.appendChild(document.createTextNode(part));
+        return;
+      }
+
+      const word = document.createElement("span");
+      word.className = "hero-title-word";
+      Array.from(part).forEach((character) => {
+        const letter = document.createElement("span");
+        const styleIndex = letterIndex % lifts.length;
+        letter.className = "hero-title-letter";
+        letter.textContent = character;
+        letter.style.setProperty("--hero-letter-lift", `-${lifts[styleIndex]}px`);
+        letter.style.setProperty("--hero-letter-rotate", `${rotations[styleIndex]}deg`);
+        letter.style.setProperty("--hero-letter-scale", scales[styleIndex]);
+        letter.style.setProperty("--hero-letter-delay", `${Math.min(letterIndex * 5, 180)}ms`);
+        word.appendChild(letter);
+        letterIndex += 1;
+      });
+      fragment.appendChild(word);
+    });
+
+    element.replaceChildren(fragment);
+    return text;
+  }
+
   function render(raw) {
     const data = raw && typeof raw === "object" ? raw : {};
     const c = Object.assign({}, DEFAULTS, data);
@@ -85,6 +122,12 @@ navLinks.forEach((link) => {
     $("hero-h-highlight").textContent = c.heading_highlight || "";
     $("hero-h-end").textContent = c.heading_end || "";
     $("hero-text").textContent = c.text || "";
+    const fullHeading = [
+      wrapHeroHeadingSegment($("hero-h-start")),
+      wrapHeroHeadingSegment($("hero-h-highlight")),
+      wrapHeroHeadingSegment($("hero-h-end"))
+    ].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+    $("hero-title").setAttribute("aria-label", fullHeading);
   }
 
   async function fetchContent() {
@@ -755,6 +798,41 @@ navLinks.forEach((link) => {
   const $journey = (id) => document.getElementById(id);
   if (!$journey("home-journey")) return;
 
+  function animateJourneyHeading(text) {
+    const heading = $journey("home-journey-title");
+    const parts = String(text || "").match(/\s+|[^\s]+/gu) || [];
+    const lifts = [6, 3, 5, 2, 7, 4, 3, 6, 2];
+    const rotations = [-2, 1, -1, 2, -1, 1, -2, 1, -1];
+    const scales = [1.1, 1.08, 1.12, 1.06, 1.15, 1.09, 1.07, 1.11, 1.08];
+    const fragment = document.createDocumentFragment();
+    let index = 0;
+    parts.forEach((part) => {
+      if (/^\s+$/u.test(part)) {
+        fragment.appendChild(document.createTextNode(part));
+        return;
+      }
+      const word = document.createElement("span");
+      word.className = "hero-title-word";
+      Array.from(part).forEach((character) => {
+        const letter = document.createElement("span");
+        const style = index % lifts.length;
+        letter.className = "hero-title-letter";
+        letter.textContent = character;
+        letter.style.setProperty("--hero-letter-lift", `-${lifts[style]}px`);
+        letter.style.setProperty("--hero-letter-rotate", `${rotations[style]}deg`);
+        letter.style.setProperty("--hero-letter-scale", scales[style]);
+        letter.style.setProperty("--hero-letter-delay", `${Math.min(index * 5, 180)}ms`);
+        word.appendChild(letter);
+        index += 1;
+      });
+      fragment.appendChild(word);
+    });
+    heading.replaceChildren(fragment);
+    heading.classList.add("hero-letter-motion-title");
+    heading.dataset.heroLetterSource = String(text || "");
+    heading.setAttribute("aria-label", String(text || ""));
+  }
+
   function safeUrl(value) {
     const url = String(value || "").trim();
     if (!url) return "#";
@@ -766,7 +844,7 @@ navLinks.forEach((link) => {
   function render(raw) {
     const data = raw && typeof raw === "object" ? raw : {};
     const c = Object.assign({}, DEFAULTS, data);
-    $journey("home-journey-title").textContent = c.heading || "";
+    animateJourneyHeading(c.heading || "");
     $journey("home-journey-link").textContent = c.button_text || "";
     $journey("home-journey-link").href = safeUrl(c.button_url);
     $journey("home-journey-number").textContent = c.number || "";

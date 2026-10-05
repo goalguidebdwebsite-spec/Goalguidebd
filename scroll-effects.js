@@ -19,6 +19,58 @@
     ".course-meta",
     ".course-extra-copy"
   ];
+  const heroHeadingSelector = [
+    "#hero-title",
+    "main h1:not(#registration-title)",
+    ".german-hero h1",
+    ".class-schedule-hero h1",
+    ".admission-hero h1",
+    ".about-hero h1",
+    ".course-page-hero h1"
+  ].join(",");
+
+  function prepareHeroHeading(heading) {
+    if (!(heading instanceof Element) || heading.classList.contains("hero-letter-motion-title")) return;
+    if (!heading.querySelector(".hero-title-letter")) {
+      const text = heading.textContent || "";
+      const parts = text.match(/\s+|[^\s]+/gu) || [];
+      const lifts = [6, 3, 5, 2, 7, 4, 3, 6, 2];
+      const rotations = [-2, 1, -1, 2, -1, 1, -2, 1, -1];
+      const scales = [1.1, 1.08, 1.12, 1.06, 1.15, 1.09, 1.07, 1.11, 1.08];
+      const fragment = document.createDocumentFragment();
+      let letterIndex = 0;
+
+      parts.forEach((part) => {
+        if (/^\s+$/u.test(part)) {
+          fragment.appendChild(document.createTextNode(part));
+          return;
+        }
+        const word = document.createElement("span");
+        word.className = "hero-title-word";
+        Array.from(part).forEach((character) => {
+          const letter = document.createElement("span");
+          const styleIndex = letterIndex % lifts.length;
+          letter.className = "hero-title-letter";
+          letter.textContent = character;
+          letter.style.setProperty("--hero-letter-lift", `-${lifts[styleIndex]}px`);
+          letter.style.setProperty("--hero-letter-rotate", `${rotations[styleIndex]}deg`);
+          letter.style.setProperty("--hero-letter-scale", scales[styleIndex]);
+          letter.style.setProperty("--hero-letter-delay", `${Math.min(letterIndex * 5, 180)}ms`);
+          word.appendChild(letter);
+          letterIndex += 1;
+        });
+        fragment.appendChild(word);
+      });
+      heading.replaceChildren(fragment);
+    }
+    heading.classList.add("hero-letter-motion-title");
+  }
+
+  function scanHeroHeadings(root) {
+    if (!(root instanceof Element || root instanceof Document)) return;
+    if (root instanceof Element && root.matches(heroHeadingSelector)) prepareHeroHeading(root);
+    root.querySelectorAll(heroHeadingSelector).forEach(prepareHeroHeading);
+  }
 
   // The German Language overview has its own observer for the Journey copy
   // and statistics. Avoid animating their parent at the same time.
@@ -30,6 +82,7 @@
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion || !("IntersectionObserver" in window)) return;
+  scanHeroHeadings(document);
   const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
   const observed = new WeakSet();
@@ -57,6 +110,7 @@
 
   function scan(root) {
     if (!(root instanceof Element || root instanceof Document)) return;
+    scanHeroHeadings(root);
     if (root instanceof Element && root.matches(selector)) watch(root);
     root.querySelectorAll(selector).forEach(watch);
   }

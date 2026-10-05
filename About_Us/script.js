@@ -442,9 +442,44 @@ navLinks.forEach((link) => {
     return url.startsWith("/") || url.startsWith("#") || url.startsWith("?") ? url : "../" + url;
   }
 
+  function animateJourneyHeading(text) {
+    const heading = $("home-journey-title");
+    const parts = String(text || "").match(/\s+|[^\s]+/gu) || [];
+    const lifts = [6, 3, 5, 2, 7, 4, 3, 6, 2];
+    const rotations = [-2, 1, -1, 2, -1, 1, -2, 1, -1];
+    const scales = [1.1, 1.08, 1.12, 1.06, 1.15, 1.09, 1.07, 1.11, 1.08];
+    const fragment = document.createDocumentFragment();
+    let index = 0;
+    parts.forEach((part) => {
+      if (/^\s+$/u.test(part)) {
+        fragment.appendChild(document.createTextNode(part));
+        return;
+      }
+      const word = document.createElement("span");
+      word.className = "hero-title-word";
+      Array.from(part).forEach((character) => {
+        const letter = document.createElement("span");
+        const style = index % lifts.length;
+        letter.className = "hero-title-letter";
+        letter.textContent = character;
+        letter.style.setProperty("--hero-letter-lift", `-${lifts[style]}px`);
+        letter.style.setProperty("--hero-letter-rotate", `${rotations[style]}deg`);
+        letter.style.setProperty("--hero-letter-scale", scales[style]);
+        letter.style.setProperty("--hero-letter-delay", `${Math.min(index * 5, 180)}ms`);
+        word.appendChild(letter);
+        index += 1;
+      });
+      fragment.appendChild(word);
+    });
+    heading.replaceChildren(fragment);
+    heading.classList.add("hero-letter-motion-title");
+    heading.dataset.heroLetterSource = String(text || "");
+    heading.setAttribute("aria-label", String(text || ""));
+  }
+
   function render(raw) {
     const c = Object.assign({}, DEFAULTS, raw && typeof raw === "object" ? raw : {});
-    $("home-journey-title").textContent = c.heading || "";
+    animateJourneyHeading(c.heading || "");
     $("home-journey-link").textContent = c.button_text || "";
     $("home-journey-link").href = resolvePageUrl(c.button_url);
     $("home-journey-number").textContent = c.number || "";
