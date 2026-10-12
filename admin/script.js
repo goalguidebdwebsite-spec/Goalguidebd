@@ -1500,7 +1500,9 @@ let blogPosts = [];
 let blogPostsLoaded = false;
 const BLOG_POSTS_TABLE = "blog_posts";
 const BLOG_PDF_BUCKET = "blog-pdfs";
+const BLOG_IMAGE_BUCKET = "site-images";
 const BLOG_PDF_MAX_SIZE = 25 * 1024 * 1024;
+const BLOG_IMAGE_MAX_SIZE = 8 * 1024 * 1024;
 
 function blogStatus(message, type) {
   const status = $("blog-post-status");
@@ -1514,7 +1516,7 @@ function blogRenderAdminList() {
   if (!blogPosts.length) {
     const empty = document.createElement("p");
     empty.className = "hero-hint";
-    empty.textContent = "No blog posts yet. Add the first one above.";
+    empty.textContent = "No blog posts or success stories yet. Add one above.";
     list.appendChild(empty);
     return;
   }
@@ -1524,10 +1526,13 @@ function blogRenderAdminList() {
     row.className = "blog-admin-post";
     const image = document.createElement("img");
     image.src = blogAdminImageUrl(post.image_url);
-    image.alt = "Blog post image preview";
+    image.alt = (post.post_type === "story" ? "Success story" : "Blog post") + " image preview";
     image.loading = "lazy";
     const description = document.createElement("p");
     description.textContent = post.description;
+    const type = document.createElement("span");
+    type.className = "blog-admin-kind";
+    type.textContent = post.post_type === "story" ? "Success story" : "Blog post";
     const pdf = document.createElement("a");
     pdf.className = "blog-admin-pdf-link";
     pdf.textContent = post.pdf_url ? "Download attached PDF" : "No PDF attached";
@@ -1549,7 +1554,9 @@ function blogRenderAdminList() {
     remove.textContent = "Delete";
     remove.addEventListener("click", () => blogDeletePost(post));
     actions.append(edit, remove);
-    row.append(image, description, pdf, actions);
+    row.append(image, type, description);
+    if (post.post_type !== "story") row.appendChild(pdf);
+    row.appendChild(actions);
     list.appendChild(row);
   });
 }
@@ -1589,11 +1596,48 @@ function blogPdfStoragePath(value) {
   }
 }
 
+function blogImageStoragePath(value) {
+  try {
+    const url = new URL(value);
+    const marker = "/storage/v1/object/public/" + BLOG_IMAGE_BUCKET + "/";
+    const index = url.pathname.indexOf(marker);
+    const path = index < 0 ? null : decodeURIComponent(url.pathname.slice(index + marker.length));
+    return path && path.startsWith("blog-stories/") ? path : null;
+  } catch (error) {
+    return null;
+  }
+}
+
 async function blogRemovePdf(value) {
   const path = blogPdfStoragePath(value);
   if (!path) return null;
   const { error } = await sb.storage.from(BLOG_PDF_BUCKET).remove([path]);
   return error || null;
+}
+
+async function blogRemoveImage(value) {
+  const path = blogImageStoragePath(value);
+  if (!path) return null;
+  const { error } = await sb.storage.from(BLOG_IMAGE_BUCKET).remove([path]);
+  return error || null;
+}
+
+async function blogUploadImage(file) {
+  if (!file) return null;
+  if (!file.type.startsWith("image/")) throw new Error("Choose a valid image file.");
+  if (file.size > BLOG_IMAGE_MAX_SIZE) throw new Error("Image files must be 8 MB or smaller.");
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const id = window.crypto && typeof window.crypto.randomUUID === "function"
+    ? window.crypto.randomUUID()
+    : Date.now() + "-" + Math.random().toString(36).slice(2);
+  const path = "blog-stories/" + id + "." + ext;
+  const { error } = await sb.storage.from(BLOG_IMAGE_BUCKET).upload(path, file, {
+    cacheControl: "3600",
+    upsert: false,
+    contentType: file.type
+  });
+  if (error) throw new Error("Image upload failed: " + error.message);
+  return sb.storage.from(BLOG_IMAGE_BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
 async function blogUploadPdf(file) {
@@ -1626,18 +1670,52 @@ async function blogUploadPdf(file) {
 function blogResetForm() {
   $("blog-post-form").reset();
   $("blog-post-id").value = "";
+  $("blog-post-type").value = "blog";
+  $("blog-post-image-file").value = "";
+  const currentImage = $("blog-post-current-image");
+  currentImage.replaceChildren();
+  currentImage.hidden = true;
   const currentPdf = $("blog-post-current-pdf");
   currentPdf.replaceChildren();
   currentPdf.hidden = true;
   $("blog-editor-heading").textContent = "Add a blog post";
   $("blog-post-save").textContent = "Add blog post";
   $("blog-post-cancel").hidden = true;
+  blogUpdateTypeFields();
+}
+
+function blogUpdateTypeFields() {
+  const isStory = $("blog-post-type").value === "story";
+  $("blog-post-description").maxLength = isStory ? 2500 : 600;
+  $("blog-post-pdf-field").hidden = isStory;
+  $("blog-post-current-pdf").hidden = isStory || !$("blog-post-current-pdf").childNodes.length;
+  $("blog-post-description-label").textContent = isStory
+    ? "Success story description"
+    : "Description / download button text";
+  $("blog-editor-heading").textContent = $("blog-post-id").value
+    ? (isStory ? "Edit a success story" : "Edit a blog post")
+    : (isStory ? "Add a success story" : "Add a blog post");
+  $("blog-post-save").textContent = $("blog-post-id").value
+    ? "Save changes"
+    : (isStory ? "Add success story" : "Add blog post");
 }
 
 function blogEditPost(post) {
   $("blog-post-id").value = post.id;
+  $("blog-post-type").value = post.post_type === "story" ? "story" : "blog";
   $("blog-post-image").value = post.image_url;
+  $("blog-post-image-file").value = "";
   $("blog-post-description").value = post.description;
+  const currentImage = $("blog-post-current-image");
+  currentImage.replaceChildren();
+  const imageLink = document.createElement("a");
+  imageLink.href = blogAdminImageUrl(post.image_url);
+  imageLink.target = "_blank";
+  imageLink.rel = "noopener noreferrer";
+  imageLink.textContent = "View current image";
+  currentImage.append("Current image: ", imageLink);
+  currentImage.hidden = false;
+  $("blog-post-pdf").value = "";
   const currentPdf = $("blog-post-current-pdf");
   currentPdf.replaceChildren();
   if (post.pdf_url) {
@@ -1651,8 +1729,7 @@ function blogEditPost(post) {
   } else {
     currentPdf.hidden = true;
   }
-  $("blog-editor-heading").textContent = "Edit blog post";
-  $("blog-post-save").textContent = "Save changes";
+  blogUpdateTypeFields();
   $("blog-post-cancel").hidden = false;
   $("blog-post-image").focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1663,18 +1740,18 @@ async function blogLoadPosts() {
   list.textContent = "Loading blog posts…";
   const { data, error } = await sb
     .from(BLOG_POSTS_TABLE)
-    .select("id,image_url,pdf_url,description,sort_order,created_at")
+    .select("id,image_url,pdf_url,description,post_type,sort_order,created_at")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) {
     blogPostsLoaded = false;
     blogStatus("Could not load posts: " + error.message, "error");
-    list.textContent = "Check that the Supabase Blog setup SQL has been run.";
+    list.textContent = "Run the updated Blog/Stories setup SQL in Supabase, then reload this section.";
     return;
   }
   blogPosts = data || [];
   blogRenderAdminList();
-  blogStatus(blogPosts.length + " published post" + (blogPosts.length === 1 ? "" : "s") + ".", "ok");
+  blogStatus(blogPosts.length + " published item" + (blogPosts.length === 1 ? "" : "s") + ".", "ok");
 }
 
 function blogLoadOnce() {
@@ -1685,12 +1762,19 @@ function blogLoadOnce() {
 
 $("blog-post-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-  const imageUrl = $("blog-post-image").value.trim();
+  const postType = $("blog-post-type").value === "story" ? "story" : "blog";
+  const imageFile = $("blog-post-image-file").files[0] || null;
+  let imageUrl = $("blog-post-image").value.trim();
   const description = $("blog-post-description").value.trim();
   const postId = $("blog-post-id").value;
-  const pdfFile = $("blog-post-pdf").files[0] || null;
+  const pdfFile = postType === "blog" ? ($("blog-post-pdf").files[0] || null) : null;
   const existingPost = postId ? blogPosts.find((post) => post.id === postId) : null;
-  if (!imageUrl || !description) {
+  if (imageFile && imageUrl) {
+    blogStatus("Use an image link or choose a photo, not both.", "error");
+    return;
+  }
+  if (!imageFile && !imageUrl && existingPost) imageUrl = existingPost.image_url;
+  if ((!imageUrl && !imageFile) || !description) {
     blogStatus("Add both an image link and a description.", "error");
     return;
   }
@@ -1698,26 +1782,30 @@ $("blog-post-form").addEventListener("submit", async (event) => {
     blogStatus("Enter a valid image URL or a path such as Images/blog-post.webp.", "error");
     return;
   }
-  if (!pdfFile && !(existingPost && existingPost.pdf_url)) {
+  if (postType === "blog" && !pdfFile && !(existingPost && existingPost.pdf_url && existingPost.post_type !== "story")) {
     blogStatus("Attach a PDF file before publishing this post.", "error");
     return;
   }
   const button = $("blog-post-save");
   button.disabled = true;
-  blogStatus(pdfFile ? "Uploading PDF and saving post…" : postId ? "Saving changes…" : "Publishing post…");
+  blogStatus(imageFile || pdfFile ? "Uploading files and saving…" : postId ? "Saving changes…" : "Publishing item…");
+  let uploadedImageUrl = null;
   let uploadedPdfUrl = null;
   let result;
   try {
+    if (imageFile) uploadedImageUrl = await blogUploadImage(imageFile);
     if (pdfFile) uploadedPdfUrl = await blogUploadPdf(pdfFile);
   } catch (error) {
+    if (uploadedImageUrl) await blogRemoveImage(uploadedImageUrl);
     button.disabled = false;
     blogStatus(error.message, "error");
     return;
   }
   const postValues = {
-    image_url: imageUrl,
+    image_url: uploadedImageUrl || imageUrl,
     description,
-    ...(uploadedPdfUrl ? { pdf_url: uploadedPdfUrl } : {}),
+    post_type: postType,
+    pdf_url: postType === "story" ? null : (uploadedPdfUrl || (existingPost && existingPost.pdf_url) || null),
     updated_at: new Date().toISOString()
   };
   if (postId) {
@@ -1732,6 +1820,7 @@ $("blog-post-form").addEventListener("submit", async (event) => {
   button.disabled = false;
   if (result.error) {
     if (uploadedPdfUrl) await blogRemovePdf(uploadedPdfUrl);
+    if (uploadedImageUrl) await blogRemoveImage(uploadedImageUrl);
     blogStatus("Could not save post: " + result.error.message, "error");
     return;
   }
@@ -1739,16 +1828,32 @@ $("blog-post-form").addEventListener("submit", async (event) => {
     const cleanupError = await blogRemovePdf(existingPost.pdf_url);
     if (cleanupError) console.warn("The previous blog PDF could not be removed from Storage.", cleanupError);
   }
+  if (existingPost && existingPost.image_url && existingPost.image_url !== postValues.image_url) {
+    const cleanupError = await blogRemoveImage(existingPost.image_url);
+    if (cleanupError) console.warn("The previous story image could not be removed from Storage.", cleanupError);
+  }
+  if (existingPost && existingPost.pdf_url && postType === "story") {
+    const cleanupError = await blogRemovePdf(existingPost.pdf_url);
+    if (cleanupError) console.warn("The previous blog PDF could not be removed from Storage.", cleanupError);
+  }
   blogResetForm();
   await blogLoadPosts();
-  blogStatus("Blog post saved. It will appear across the site.", "ok");
-  toast("Blog post saved.");
+  blogStatus(postType === "story" ? "Success story saved. It will appear on Home, German Language, and About Us." : "Blog post saved. It will appear across the site.", "ok");
+  toast(postType === "story" ? "Success story saved." : "Blog post saved.");
 });
 
 $("blog-post-cancel").addEventListener("click", blogResetForm);
+$("blog-post-type").addEventListener("change", blogUpdateTypeFields);
+$("blog-post-image-file").addEventListener("change", () => {
+  if ($("blog-post-image-file").files.length) $("blog-post-image").value = "";
+});
+$("blog-post-image").addEventListener("input", () => {
+  if ($("blog-post-image").value.trim()) $("blog-post-image-file").value = "";
+});
 
 async function blogDeletePost(post) {
-  if (!window.confirm("Delete this blog post from the site?")) return;
+  const itemName = post.post_type === "story" ? "success story" : "blog post";
+  if (!window.confirm("Delete this " + itemName + " from the site?")) return;
   const { error } = await sb.from(BLOG_POSTS_TABLE).delete().eq("id", post.id);
   if (error) {
     blogStatus("Could not delete post: " + error.message, "error");
@@ -1758,10 +1863,12 @@ async function blogDeletePost(post) {
     const cleanupError = await blogRemovePdf(post.pdf_url);
     if (cleanupError) console.warn("The deleted blog PDF could not be removed from Storage.", cleanupError);
   }
+  const imageCleanupError = await blogRemoveImage(post.image_url);
+  if (imageCleanupError) console.warn("The deleted story image could not be removed from Storage.", imageCleanupError);
   blogPosts = blogPosts.filter((item) => item.id !== post.id);
   blogRenderAdminList();
-  blogStatus("Blog post deleted.", "ok");
-  toast("Blog post deleted.");
+  blogStatus(post.post_type === "story" ? "Success story deleted." : "Blog post deleted.", "ok");
+  toast(post.post_type === "story" ? "Success story deleted." : "Blog post deleted.");
 }
 
 tabs.forEach((tab) => {
@@ -1773,6 +1880,7 @@ enterPanel = async function () {
   if (location.hash === "#blog") blogLoadOnce();
 };
 if (sessionStorage.getItem(SESSION_KEY) === "1" && location.hash === "#blog") blogLoadOnce();
+blogUpdateTypeFields();
 
 /* ===== Class Schedule editor =====
    Saves both batch tables to the Supabase table class_schedule_settings

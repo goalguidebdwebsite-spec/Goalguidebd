@@ -108,6 +108,39 @@ textarea {
   border-radius: 8px;
 }
 
+/* Content type selector in the Blog/Stories editor. */
+#blog-post-type {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 2.75rem 0.65rem 0.9rem;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #cfd4db;
+  border-radius: 10px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m3 6 5 5 5-5' stroke='%2357606d' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.95rem center;
+  background-size: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+#blog-post-type:hover {
+  border-color: #9ba4b1;
+  background-color: #fcfcfd;
+}
+
+#blog-post-type:focus-visible {
+  border-color: var(--red);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(237, 28, 36, 0.13);
+}
+
 .home-save-status {
   min-height: 1.5rem;
   margin: -.6rem 0 1.1rem;
@@ -1063,6 +1096,23 @@ button:focus-visible {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #f8fafc;
+}
+
+.blog-admin-kind {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: .8rem;
+  padding: .3rem .65rem;
+  border-radius: 999px;
+  background: #fff0cf;
+  color: #754500;
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.blog-current-image a {
+  color: var(--primary, #ed1c24);
+  font-weight: 700;
 }
 
 .blog-admin-post img {

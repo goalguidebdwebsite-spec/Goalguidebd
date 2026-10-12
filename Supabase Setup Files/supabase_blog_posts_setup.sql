@@ -1,9 +1,10 @@
--- Shared Blog feed for Home, About Us, German Language, and Blog pages.
--- Run in the Supabase SQL Editor. Existing posts are preserved on re-run.
+-- Shared Blog and Success Stories feed for Home, About Us, German Language, and Blog pages.
+-- Run in the Supabase SQL Editor. Existing blog posts are preserved on re-run.
 create table if not exists public.blog_posts (
   id uuid primary key default gen_random_uuid(),
   image_url text not null check (length(trim(image_url)) > 0),
   description text not null check (length(trim(description)) > 0),
+  post_type text not null default 'blog' check (post_type in ('blog', 'story')),
   pdf_url text,
   sort_order integer not null default 0,
   created_at timestamptz not null default now(),
@@ -13,6 +14,23 @@ create table if not exists public.blog_posts (
 -- Add the PDF column to projects that created blog_posts before PDF downloads
 -- were supported. Old posts remain visible and can be edited with a PDF later.
 alter table public.blog_posts add column if not exists pdf_url text;
+alter table public.blog_posts add column if not exists post_type text not null default 'blog';
+update public.blog_posts set post_type = 'blog' where post_type is null;
+alter table public.blog_posts alter column post_type set default 'blog';
+alter table public.blog_posts alter column post_type set not null;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid = 'public.blog_posts'::regclass
+      and conname = 'blog_posts_post_type_check'
+  ) then
+    alter table public.blog_posts
+      add constraint blog_posts_post_type_check check (post_type in ('blog', 'story'));
+  end if;
+end
+$$;
 
 alter table public.blog_posts enable row level security;
 
@@ -69,6 +87,30 @@ create policy "Signed-in admins can delete blog PDFs"
   using (
     bucket_id = 'blog-pdfs'
     and (storage.foldername(name))[1] = 'blog-posts'
+  );
+
+-- Story images use the public site-images bucket; uploads and deletes require
+-- an authenticated admin and are limited to this feature's folder.
+insert into storage.buckets (id, name, public)
+values ('site-images', 'site-images', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Public can read Goal Guide site images" on storage.objects;
+create policy "Public can read Goal Guide site images"
+  on storage.objects for select to anon, authenticated
+  using (bucket_id = 'site-images');
+
+drop policy if exists "Authenticated admins can upload Goal Guide site images" on storage.objects;
+create policy "Authenticated admins can upload Goal Guide site images"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'site-images');
+
+drop policy if exists "Authenticated admins can delete Goal Guide story images" on storage.objects;
+create policy "Authenticated admins can delete Goal Guide story images"
+  on storage.objects for delete to authenticated
+  using (
+    bucket_id = 'site-images'
+    and (storage.foldername(name))[1] = 'blog-stories'
   );
 
 -- Preserve the three posts already stored by the old home-page editor when

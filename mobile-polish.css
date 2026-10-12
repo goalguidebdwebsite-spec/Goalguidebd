@@ -143,7 +143,8 @@ html {
 }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
-  #home-blogs .home-blogs-heading h2 {
+  #home-blogs .home-blogs-heading h2,
+  #home-stories .home-blogs-heading h2 {
     color: transparent;
     background-image: linear-gradient(90deg, #ed1c24 0%, #ffc33c 25%, #ed1c24 50%, #ffc33c 75%, #ed1c24 100%);
     background-size: 200% 100%;
@@ -161,12 +162,112 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #home-blogs .home-blogs-heading h2 {
+  #home-blogs .home-blogs-heading h2,
+  #home-stories .home-blogs-heading h2 {
     color: inherit;
     background: none;
     -webkit-text-fill-color: currentColor;
     animation: none;
   }
+}
+
+/* Success stories share the Blogs heading treatment and responsive card style. */
+#home-stories,
+#home-stories *,
+#home-stories *::before,
+#home-stories *::after {
+  box-sizing: border-box;
+}
+
+#home-stories {
+  width: 100%;
+  background: #fff;
+  color: #171717;
+  font-family: var(--nav-font, "Trebuchet MS", "Ubuntu", "Segoe UI", sans-serif);
+}
+
+#home-stories .home-stories-inner {
+  /* Keep success stories aligned with the shared desktop header/footer container. */
+  width: min(1236px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 64px 0 72px;
+}
+
+#home-stories .home-blogs-heading {
+  margin: 0 auto 54px;
+  text-align: center;
+}
+
+#home-stories .home-blogs-heading h2 {
+  margin: 0;
+  font-size: clamp(34px, 3vw, 50px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+#home-stories .home-stories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+
+#home-stories .success-story-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e8e8ec;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(20, 24, 32, .07);
+}
+
+#home-stories .success-story-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.67 / 1;
+  object-fit: cover;
+}
+
+#home-stories .success-story-description {
+  margin: 0;
+  padding: 20px 22px 24px;
+  color: #343a40;
+  font-size: clamp(15px, 1.08vw, 18px);
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+#home-stories .blog-empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 24px;
+  color: #60656d;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  #home-stories .home-stories-inner {
+    width: min(100% - 40px, 760px);
+    padding: 54px 0 60px;
+  }
+  #home-stories .home-stories-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  #home-stories .home-stories-inner {
+    width: min(100% - 32px, 520px);
+    padding: 44px 0 52px;
+  }
+  #home-stories .home-blogs-heading { margin-bottom: 34px; }
+  #home-stories .home-blogs-heading h2 { font-size: 31px; }
+  #home-stories .home-stories-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  #home-stories .success-story-description { padding: 17px 18px 20px; }
 }
 
 /* Shared one-second letter wave for each public page's hero heading. */

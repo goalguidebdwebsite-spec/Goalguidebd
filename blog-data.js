@@ -30,42 +30,70 @@
     }
   }
 
+  function renderPost(post, isStory) {
+    const src = imageUrl(post.image_url);
+    const description = String(post.description || "").trim();
+    if (!src || !description) return null;
+
+    const article = document.createElement("article");
+    article.className = "home-blog-card blog-post-card" + (isStory ? " success-story-card" : "");
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = description;
+    image.loading = "lazy";
+    image.decoding = "async";
+    const text = document.createElement("p");
+    text.className = "success-story-description";
+    text.textContent = description;
+
+    if (isStory) {
+      article.append(image, text);
+    } else {
+      const heading = document.createElement("h3");
+      const downloadUrl = pdfDownloadUrl(post.pdf_url, description);
+      if (downloadUrl) {
+        const download = document.createElement("a");
+        download.className = "blog-download-link";
+        download.href = downloadUrl;
+        download.setAttribute("download", "");
+        download.textContent = description;
+        download.setAttribute("aria-label", "Download PDF: " + description);
+        heading.appendChild(download);
+      } else {
+        heading.textContent = description;
+      }
+      article.append(image, heading);
+    }
+    return article;
+  }
+
   function render(posts) {
+    const validPosts = Array.isArray(posts) ? posts : [];
     document.querySelectorAll("[data-blog-grid]").forEach((grid) => {
       grid.replaceChildren();
-      (Array.isArray(posts) ? posts : []).forEach((post) => {
-        const src = imageUrl(post.image_url);
-        const description = String(post.description || "").trim();
-        if (!src || !description) return;
-
-        const article = document.createElement("article");
-        article.className = "home-blog-card blog-post-card";
-        const image = document.createElement("img");
-        image.src = src;
-        image.alt = description;
-        image.loading = "lazy";
-        image.decoding = "async";
-        const heading = document.createElement("h3");
-        const downloadUrl = pdfDownloadUrl(post.pdf_url, description);
-        if (downloadUrl) {
-          const download = document.createElement("a");
-          download.className = "blog-download-link";
-          download.href = downloadUrl;
-          download.setAttribute("download", "");
-          download.textContent = description;
-          download.setAttribute("aria-label", "Download PDF: " + description);
-          heading.appendChild(download);
-        } else {
-          heading.textContent = description;
-        }
-        article.append(image, heading);
-        grid.appendChild(article);
+      validPosts.filter((post) => post.post_type !== "story").forEach((post) => {
+        const article = renderPost(post, false);
+        if (article) grid.appendChild(article);
       });
 
       if (!grid.children.length) {
         const empty = document.createElement("p");
         empty.className = "blog-empty-state";
         empty.textContent = "New stories and updates are coming soon.";
+        grid.appendChild(empty);
+      }
+    });
+
+    document.querySelectorAll("[data-story-grid]").forEach((grid) => {
+      grid.replaceChildren();
+      validPosts.filter((post) => post.post_type === "story").forEach((post) => {
+        const article = renderPost(post, true);
+        if (article) grid.appendChild(article);
+      });
+      if (!grid.children.length) {
+        const empty = document.createElement("p");
+        empty.className = "blog-empty-state";
+        empty.textContent = "Success stories are coming soon.";
         grid.appendChild(empty);
       }
     });
@@ -83,7 +111,7 @@
     render([]);
   }
 
-  fetch(SUPABASE_URL + "/rest/v1/blog_posts?select=id,image_url,pdf_url,description,sort_order,created_at&order=sort_order.asc,created_at.desc", {
+  fetch(SUPABASE_URL + "/rest/v1/blog_posts?select=id,image_url,pdf_url,description,post_type,sort_order,created_at&order=sort_order.asc,created_at.desc", {
     headers: { apikey: SUPABASE_ANON_KEY, Accept: "application/json" },
     cache: "no-store"
   })

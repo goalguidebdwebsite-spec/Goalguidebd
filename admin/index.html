@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/webp" href="../Images/Goalguide-Logo.webp">
   <title>Admin</title>
-  <link rel="stylesheet" href="style.css?v=20260929-admin-toolbar-cleanup">
+  <link rel="stylesheet" href="style.css?v=20261012-blog-stories-ui">
 </head>
 <body>
 
@@ -53,7 +53,7 @@
         <button class="tab" type="button" data-target="admission">Admission</button>
         <button class="tab" type="button" data-target="exam">Exam</button>
         <button class="tab" type="button" data-target="about">About Us</button>
-        <button class="tab" type="button" data-target="blog">Blog</button>
+        <button class="tab" type="button" data-target="blog">Blog/Stories</button>
         <button class="tab" type="button" data-target="terms">Terms</button>
         <button class="tab" type="button" data-target="privacy">Privacy</button>
         <button class="tab" type="button" data-target="contact-us">Contact Us</button>
@@ -308,24 +308,36 @@
 
       <section class="panel" id="section-blog" hidden>
         <div class="panel-head">
-          <h1>Blog <span class="sub">Shared posts</span></h1>
+          <h1>Blog/Stories <span class="sub">Shared posts and success stories</span></h1>
         </div>
         <div class="card blog-editor-card">
           <h2 id="blog-editor-heading">Add a blog post</h2>
-          <p class="hero-hint">Posts added here appear on the main page, About Us page, German Language page, and Blog page. Add an image URL, attach a PDF, and write the text visitors will click to download it.</p>
+          <p class="hero-hint">Manage blog posts and success stories for the public site. Blog posts appear on the Blog page and home sections. Success stories appear on Home, German Language, and About Us.</p>
           <form id="blog-post-form">
             <input type="hidden" id="blog-post-id">
             <label class="field">
-              <span>Image link</span>
-              <input type="text" id="blog-post-image" placeholder="Images/blog-post.webp or https://…" required>
+              <span>Content type</span>
+              <select id="blog-post-type">
+                <option value="blog">Blog post</option>
+                <option value="story">Success story</option>
+              </select>
             </label>
             <label class="field">
+              <span>Image link</span>
+              <input type="text" id="blog-post-image" placeholder="Images/photo.webp or https://…">
+            </label>
+            <label class="field">
+              <span>Choose image <small>(optional if an image link is provided; max 8 MB)</small></span>
+              <input type="file" id="blog-post-image-file" accept="image/*">
+            </label>
+            <p class="hero-hint blog-current-image" id="blog-post-current-image" hidden></p>
+            <label class="field" id="blog-post-pdf-field">
               <span>PDF file <small>(required for new posts; optional when editing)</small></span>
               <input type="file" id="blog-post-pdf" accept="application/pdf,.pdf">
             </label>
             <p class="hero-hint blog-current-pdf" id="blog-post-current-pdf" hidden></p>
             <label class="field">
-              <span>Description / download button text</span>
+              <span id="blog-post-description-label">Description / download button text</span>
               <textarea id="blog-post-description" rows="4" maxlength="600" required></textarea>
             </label>
             <div class="save-bar">
@@ -336,7 +348,7 @@
           </form>
         </div>
         <div class="card blog-posts-admin-card">
-          <h2>Published posts</h2>
+          <h2>Published blog posts and stories</h2>
           <div id="blog-posts-admin-list" class="blog-posts-admin-list" aria-live="polite"></div>
         </div>
       </section>
@@ -961,6 +973,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=20260929-admin-toolbar-cleanup"></script>
+  <script src="script.js?v=20261008-blog-stories"></script>
 </body>
 </html>
