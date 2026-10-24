@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/webp" href="../Images/Goalguide-Logo.webp">
   <title>Admin</title>
-  <link rel="stylesheet" href="style.css?v=20261012-blog-stories-ui">
+  <link rel="stylesheet" href="style.css?v=20261025-course-detail-editor">
 </head>
 <body>
 
@@ -475,7 +475,7 @@
           </div>
         </div>
 
-        <p class="hero-hint german-course-editor-hint">Add as many course cards as you need, edit their details, or remove cards. Changes appear on the German Language page after you save.</p>
+        <p class="hero-hint german-course-editor-hint">Add as many course cards as you need, edit their details, or remove cards. Each card opens its own course page. Add a page description and use the bullet controls to manage the What You Will Learn list. Changes appear after you save.</p>
         <div id="german-course-fields"></div>
         <div class="german-course-add-row">
           <button class="btn btn-ghost" type="button" id="german-add-course">+ Add course card</button>
@@ -891,8 +891,8 @@
           </article>
           <article class="card help-card">
             <h2>German Language</h2>
-            <p>Add, edit, and remove any number of course cards on the German Language overview page, including image, level, title, duration, fee, description, and destination link.</p>
-            <p>Duration, fee, and description also update the matching A1–B2 course detail page when the card uses one of those levels. Choose an image link or upload an image, then save. Home page course cards are managed separately under Home.</p>
+            <p>Add, edit, and remove any number of course cards on the German Language overview page. Each card has a generated course page with its image, duration, fee, card description, detailed page description, and a What You Will Learn bullet list.</p>
+            <p>Choose an image link or upload an image. Use Add bullet point to grow the learning list; leave Link URL blank to use the generated page. Save to publish. Home page course cards are managed separately under Home.</p>
           </article>
           <article class="card help-card">
             <h2>Class Schedule</h2>
@@ -977,6 +977,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=20261025-dynamic-german-courses"></script>
+  <script src="script.js?v=20261025-course-detail-editor"></script>
 </body>
 </html>

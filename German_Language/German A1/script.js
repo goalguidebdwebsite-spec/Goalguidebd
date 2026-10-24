@@ -3,7 +3,9 @@
   const SUPABASE_URL = "https://sdzbpsxkhpogbwixhulv.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_ahS3rtwQsIrXWGo2gIoJUA_JolIlwzf";
   const CACHE_KEY = "goalguide:german-language:v1";
-  const level = document.body.dataset.courseLevel;
+  const level = document.body.dataset.courseLevel || "";
+  const requestedCourseId = new URLSearchParams(location.search).get("course") || "";
+  const isGeneratedPage = !level;
 
   const courses = {
     A1: {
@@ -48,13 +50,20 @@
     }
   };
 
-  const course = courses[level] || courses.A1;
+  let course = courses[level] || {
+    title: "Loading course…", image: "", duration: "", fee: "", description: "",
+    page_description: "", learning_points: [], link_text: "Explore More", link_url: ""
+  };
   const escapeHtml = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (character) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[character]);
 
   function buildPage() {
-    const highlightItems = course.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    const learningPoints = Array.isArray(course.learning_points) ? course.learning_points : (course.highlights || []);
+    const highlightItems = learningPoints.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    const pageDescription = getPageDescription(course);
+    const pageParagraphs = pageDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean);
+    const aboutDescription = pageParagraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
     document.getElementById("course-page").innerHTML = `
       <header class="site-header">
         <nav class="navbar" aria-label="Main navigation">
@@ -80,14 +89,14 @@
           <nav class="course-breadcrumbs" aria-label="Breadcrumb">
             <a href="index.html">Home</a><span aria-hidden="true">›</span>
             <a href="German_Language/index.html">German Courses</a><span aria-hidden="true">›</span>
-            <span aria-current="page">${escapeHtml(course.title)}</span>
+            <span id="course-breadcrumb-current" aria-current="page">${escapeHtml(course.title)}</span>
           </nav>
         </div>
       </section>
 
       <main class="course-detail" id="course-detail">
-        <figure class="course-detail-media">
-          <img class="course-detail-image" id="course-detail-image" src="${escapeHtml(course.image)}" alt="${escapeHtml(course.title)} course materials" loading="eager">
+        <figure class="course-detail-media" id="course-detail-media">
+          <img class="course-detail-image" id="course-detail-image" src="${escapeHtml(course.image || "")}" alt="${escapeHtml(course.title)} course materials" loading="eager">
         </figure>
         <div class="course-meta" aria-label="Course details">
           <span class="course-meta-badge course-meta-duration">Course Duration: <strong id="course-duration">${escapeHtml(course.duration)}</strong></span>
@@ -95,11 +104,10 @@
         </div>
         <p class="course-description" id="course-description">${escapeHtml(course.description)}</p>
         <div class="course-extra-copy">
-          <h2>About the ${escapeHtml(course.title)} Course</h2>
-          <p>${escapeHtml(course.copy)}</p>
-          <p>${escapeHtml(course.goal)}</p>
+          <h2 id="course-about-heading">About the ${escapeHtml(course.title)} Course</h2>
+          <div id="course-page-description">${aboutDescription}</div>
           <h2>What You Will Learn</h2>
-          <ul class="course-highlights">${highlightItems}</ul>
+          <ul class="course-highlights" id="course-highlights">${highlightItems}</ul>
         </div>
         <a class="course-admission-link" href="Admission/index.html">Admission Now</a>
       </main>
@@ -144,23 +152,82 @@
     catch (error) { return null; }
   }
 
+  function getPageDescription(value) {
+    const saved = String(value && value.page_description || "").trim();
+    if (saved) return saved;
+    const legacyCopy = [value && value.copy, value && value.goal].filter(Boolean).join("\n\n");
+    return legacyCopy || String(value && value.description || "");
+  }
+
+  function generatedCourseId(row, index, usedIds) {
+    const source = row.course_id || row.title || row.level || "course-" + (index + 1);
+    const base = String(source).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "course-" + (index + 1);
+    let id = base;
+    let suffix = 2;
+    while (usedIds.has(id)) id = base + "-" + suffix++;
+    usedIds.add(id);
+    return id;
+  }
+
   function findCourse(content) {
     const rows = content && Array.isArray(content.courses) ? content.courses : [];
-    const wantedTitle = course.title.toLowerCase();
-    return rows.find((row) => String(row && row.title || "").trim().toLowerCase() === wantedTitle) ||
-      rows.find((row) => String(row && row.level || "").trim().toUpperCase() === level) || null;
+    if (requestedCourseId) {
+      const usedIds = new Set();
+      const matches = rows.find((row, index) => generatedCourseId(row || {}, index, usedIds) === requestedCourseId);
+      return matches || null;
+    }
+    const wantedTitle = (courses[level] || {}).title || "";
+    return rows.find((row) => String(row && row.level || "").trim().toUpperCase() === level) ||
+      rows.find((row) => String(row && row.title || "").trim().toLowerCase() === wantedTitle.toLowerCase()) || null;
+  }
+
+  function updatePageCourse() {
+    const image = document.getElementById("course-detail-image");
+    const imageWrap = document.getElementById("course-detail-media");
+    if (image) {
+      const imageUrl = String(course.image || "").trim();
+      imageWrap.style.display = imageUrl ? "flex" : "none";
+      image.alt = (course.title || "German course") + " course materials";
+      if (imageUrl) image.src = imageUrl;
+    }
+    document.getElementById("course-page-title").textContent = course.title || "German Course";
+    document.getElementById("course-breadcrumb-current").textContent = course.title || "German Course";
+    document.getElementById("course-duration").textContent = course.duration || "";
+    document.getElementById("course-fee").textContent = course.fee || "";
+    document.getElementById("course-description").textContent = course.description || "";
+    document.getElementById("course-about-heading").textContent = "About the " + (course.title || "German") + " Course";
+    document.title = (course.title || "German Course") + " | Goal Guide BD";
+
+    const descriptionWrap = document.getElementById("course-page-description");
+    const paragraphs = getPageDescription(course).split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean);
+    descriptionWrap.replaceChildren(...paragraphs.map((paragraph) => {
+      const p = document.createElement("p");
+      p.textContent = paragraph;
+      return p;
+    }));
+
+    const points = Array.isArray(course.learning_points) ? course.learning_points : (course.highlights || []);
+    const list = document.getElementById("course-highlights");
+    list.replaceChildren(...points.filter(Boolean).map((point) => {
+      const item = document.createElement("li");
+      item.textContent = point;
+      return item;
+    }));
   }
 
   function renderCourse(settings) {
     const row = findCourse(settings);
-    if (!row) return;
-    if (row.duration) document.getElementById("course-duration").textContent = row.duration;
-    if (row.fee) document.getElementById("course-fee").textContent = row.fee;
-    if (row.description) document.getElementById("course-description").textContent = row.description;
+    if (!row) return false;
+    const rowLevel = String(row.level || level).trim().toUpperCase();
+    const defaultCourse = courses[rowLevel] || courses[level] || {};
+    course = Object.assign({}, defaultCourse, row);
+    updatePageCourse();
+    return true;
   }
 
   async function loadCourseSettings() {
-    renderCourse(readCache());
+    const cached = readCache();
+    if (cached) renderCourse(cached);
     try {
       const response = await fetch(
         SUPABASE_URL + "/rest/v1/german_language_settings?id=eq.1&select=content",
@@ -170,13 +237,27 @@
       const rows = await response.json();
       if (rows.length && rows[0].content) {
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(rows[0].content)); } catch (error) { /* cache is optional */ }
-        renderCourse(rows[0].content);
+        if (!renderCourse(rows[0].content) && isGeneratedPage) renderMissingCourse();
+      } else if (isGeneratedPage) {
+        renderMissingCourse();
       }
     } catch (error) {
       console.warn("Course duration and fee could not be refreshed from German Language settings.", error);
+      if (isGeneratedPage && course.title === "Loading course…") {
+        course = { title: "Course details unavailable", description: "Please return to the German Language page and try again.", page_description: "", learning_points: [] };
+        updatePageCourse();
+      }
     }
   }
 
+  function renderMissingCourse() {
+    course = { title: "Course not found", description: "This course may have been removed or its link is no longer available.", page_description: "", learning_points: [] };
+    updatePageCourse();
+  }
+
+  const cachedCourse = requestedCourseId ? findCourse(readCache()) : null;
+  if (cachedCourse) course = Object.assign({}, course, cachedCourse);
   buildPage();
+  updatePageCourse();
   loadCourseSettings();
 })();

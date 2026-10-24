@@ -469,6 +469,8 @@ const GERMAN_DEFAULTS = {
       duration: "12 Weeks",
       fee: "18,500 BDT",
       description: "Learn essential German language skills including basic grammar, vocabulary, listening, and speaking for everyday communication and a strong foundation.",
+      page_description: "The A1 course is designed for beginners. Step by step, you will learn how to introduce yourself, ask and answer simple questions, and manage familiar everyday situations in German.\n\nWith guided lessons and regular practice, you will build the foundation needed to continue to German A2 and prepare for the Goethe-Zertifikat A1 exam.",
+      learning_points: ["German pronunciation and alphabet", "Essential words and everyday expressions", "Basic sentence structure and grammar", "Listening, speaking, reading and writing practice"],
       link_text: "Explore More",
       link_url: "German_Language/German A1/index.html"
     },
@@ -479,6 +481,8 @@ const GERMAN_DEFAULTS = {
       duration: "12 Weeks",
       fee: "18,500 BDT",
       description: "Build on your A1 knowledge by improving sentence structure, vocabulary, listening, and speaking skills to communicate confidently in daily situations.",
+      page_description: "The A2 course develops your basic German skills so you can communicate in common situations at home, at work, while travelling, and in your community.\n\nYou will strengthen your grammar and vocabulary while practising longer conversations and preparing for the Goethe-Zertifikat A2 exam.",
+      learning_points: ["Everyday conversations and practical dialogues", "Expanded vocabulary and useful expressions", "More complex sentence structures", "Listening, speaking, reading and writing practice"],
       link_text: "Explore More",
       link_url: "German_Language/German A2/index.html"
     },
@@ -489,6 +493,8 @@ const GERMAN_DEFAULTS = {
       duration: "12 Weeks",
       fee: "18,500 BDT",
       description: "Develop independent German communication skills for academic, professional, and social contexts with structured grammar and exam-focused practice.",
+      page_description: "The B1 course helps you express opinions, describe experiences, explain plans, and take part in conversations on familiar topics with greater independence.\n\nStructured lessons and exam practice help you use German in everyday, academic, and professional situations and prepare for the Goethe-Zertifikat B1 exam.",
+      learning_points: ["Independent communication in familiar situations", "Giving opinions and explaining experiences", "Grammar and vocabulary for longer discussions", "Goethe-Zertifikat B1 exam preparation"],
       link_text: "Explore More",
       link_url: "German_Language/German B1/index.html"
     },
@@ -499,6 +505,8 @@ const GERMAN_DEFAULTS = {
       duration: "12 Weeks",
       fee: "18,500 BDT",
       description: "Achieve advanced German proficiency with fluent communication, complex grammar, academic writing, and comprehensive Goethe-Zertifikat B2 preparation.",
+      page_description: "The B2 course develops confident, detailed communication. You will work with more demanding texts and discuss academic, professional, and social topics clearly.\n\nAdvanced grammar, writing tasks, presentations, and exam strategies prepare you for the Goethe-Zertifikat B2 and real-world German communication.",
+      learning_points: ["Fluent discussion of complex topics", "Advanced grammar and precise vocabulary", "Academic and professional writing practice", "Goethe-Zertifikat B2 exam preparation"],
       link_text: "Explore More",
       link_url: "German_Language/German B2/index.html"
     }
@@ -516,6 +524,16 @@ function germanPreviewSrc(url) {
   return /^([a-z][a-z0-9+.-]*:|\/)/i.test(url) ? url : "../" + url;
 }
 
+function germanCourseId(course, index, usedIds) {
+  const source = course.course_id || course.title || course.level || "course-" + (index + 1);
+  const base = String(source).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "course-" + (index + 1);
+  let id = base;
+  let suffix = 2;
+  while (usedIds.has(id)) id = base + "-" + suffix++;
+  usedIds.add(id);
+  return id;
+}
+
 
 function normalizeGermanImagePath(value) {
   return String(value || "")
@@ -531,6 +549,7 @@ function germanRenderFields(content) {
 
   const wrap = $("german-course-fields");
   wrap.innerHTML = "";
+  const usedIds = new Set();
 
   c.courses.forEach((course, index) => {
     const fallback = GERMAN_DEFAULTS.courses[index] || {
@@ -538,9 +557,11 @@ function germanRenderFields(content) {
       description: "", link_text: "Explore More", link_url: ""
     };
     const data = Object.assign({}, fallback, course || {});
+    data.course_id = germanCourseId(data, index, usedIds);
+    data.learning_points = Array.isArray(data.learning_points) ? data.learning_points : (fallback.learning_points || []);
     data.image = normalizeGermanImagePath(data.image);
-    if (/^German_Language\/index\.html#(?:a1|a2|b1|b2)$/i.test(data.link_url || "")) {
-      data.link_url = "German_Language/German " + (data.level || fallback.level).toUpperCase() + "/index.html";
+    if (/^German_Language\/index\.html#(?:a1|a2|b1|b2)$/i.test(data.link_url || "") || /^German_Language\/German [AB][12]\/index\.html$/i.test(data.link_url || "")) {
+      data.link_url = "course.html?course=" + encodeURIComponent(data.course_id);
     }
     const displayTitle = String(data.title || fallback.title).replace(/[&<>"']/g, (character) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
@@ -569,6 +590,7 @@ function germanRenderFields(content) {
       </div>
 
       <div class="german-course-fields">
+        <input type="hidden" id="german-course-id-${index}">
         <label class="field">
           <span>Level label</span>
           <input type="text" id="german-level-${index}">
@@ -590,9 +612,20 @@ function germanRenderFields(content) {
         </label>
 
         <label class="field field-wide">
-          <span>Description</span>
+          <span>Course card description</span>
           <textarea id="german-description-${index}" rows="4"></textarea>
         </label>
+
+        <label class="field field-wide">
+          <span>Course page description</span>
+          <textarea id="german-page-description-${index}" rows="5" placeholder="Add the detailed description shown under About the course. Separate paragraphs with a blank line."></textarea>
+        </label>
+
+        <div class="field field-wide">
+          <span>What You Will Learn bullet points</span>
+          <div class="german-learning-points" id="german-learning-points-${index}"></div>
+          <button class="btn btn-ghost german-add-learning-point" type="button">+ Add bullet point</button>
+        </div>
 
         <label class="field">
           <span>Link text</span>
@@ -601,7 +634,7 @@ function germanRenderFields(content) {
 
         <label class="field">
           <span>Link URL</span>
-          <input type="text" id="german-link-url-${index}" placeholder="German_Language/German A1/index.html or https://...">
+          <input type="text" id="german-link-url-${index}" placeholder="Optional override; blank uses its generated course page">
         </label>
       </div>
 
@@ -612,25 +645,64 @@ function germanRenderFields(content) {
 
     wrap.appendChild(card);
 
+    $("german-course-id-" + index).value = data.course_id;
     $("german-image-" + index).value = data.image || "";
     $("german-level-" + index).value = data.level || "";
     $("german-title-" + index).value = data.title || "";
     $("german-duration-" + index).value = data.duration || "";
     $("german-fee-" + index).value = data.fee || "";
     $("german-description-" + index).value = data.description || "";
+    $("german-page-description-" + index).value = data.page_description || "";
     $("german-link-text-" + index).value = data.link_text || "";
     $("german-link-url-" + index).value = data.link_url || "";
 
+    const pointList = $("german-learning-points-" + index);
+    const renderLearningPoints = (points) => {
+      pointList.replaceChildren();
+      points.forEach((point) => {
+        const row = document.createElement("div");
+        row.className = "german-learning-point-row";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "german-learning-point-input";
+        input.value = point || "";
+        input.placeholder = "Learning outcome";
+        input.setAttribute("aria-label", "Learning outcome bullet point");
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "btn btn-ghost german-remove-learning-point";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove learning outcome");
+        remove.addEventListener("click", () => {
+          const currentPoints = Array.from(pointList.querySelectorAll(".german-learning-point-input"));
+          renderLearningPoints(currentPoints.filter((field) => field !== input).map((field) => field.value));
+        });
+        row.append(input, remove);
+        pointList.appendChild(row);
+      });
+    };
+    renderLearningPoints(data.learning_points);
+    card.querySelector(".german-add-learning-point").addEventListener("click", () => {
+      const points = Array.from(pointList.querySelectorAll(".german-learning-point-input")).map((field) => field.value);
+      points.push("");
+      renderLearningPoints(points);
+      pointList.querySelectorAll(".german-learning-point-input").item(points.length - 1)?.focus();
+    });
+
     const preview = $("german-image-preview-" + index);
-    preview.src = germanPreviewSrc(data.image || fallback.image);
+    const initialPreview = data.image || fallback.image;
+    preview.style.display = initialPreview ? "block" : "none";
+    if (initialPreview) preview.src = germanPreviewSrc(initialPreview);
     preview.onerror = () => {
       preview.onerror = null;
       preview.style.opacity = ".35";
     };
 
     $("german-image-" + index).addEventListener("input", () => {
+      const imageUrl = $("german-image-" + index).value.trim();
+      preview.style.display = imageUrl ? "block" : "none";
       preview.style.opacity = "1";
-      preview.src = germanPreviewSrc($("german-image-" + index).value.trim());
+      if (imageUrl) preview.src = germanPreviewSrc(imageUrl);
     });
 
     $("german-image-file-" + index).addEventListener("change", (event) =>
@@ -650,12 +722,15 @@ function germanCollect() {
   const cards = Array.from(document.querySelectorAll("#german-course-fields .german-course-editor"));
   return {
     courses: cards.map((card, index) => ({
+      course_id: $("german-course-id-" + index).value.trim(),
       level: $("german-level-" + index).value.trim(),
       title: $("german-title-" + index).value.trim(),
       image: normalizeGermanImagePath($("german-image-" + index).value.trim()),
       duration: $("german-duration-" + index).value.trim(),
       fee: $("german-fee-" + index).value.trim(),
       description: $("german-description-" + index).value.trim(),
+      page_description: $("german-page-description-" + index).value.trim(),
+      learning_points: Array.from(card.querySelectorAll(".german-learning-point-input")).map((field) => field.value.trim()).filter(Boolean),
       link_text: $("german-link-text-" + index).value.trim(),
       link_url: $("german-link-url-" + index).value.trim()
     }))
@@ -752,6 +827,7 @@ async function germanUploadImage(index, event) {
   $("german-image-" + index).value = data.publicUrl;
 
   const preview = $("german-image-preview-" + index);
+  preview.style.display = "block";
   preview.style.opacity = "1";
   preview.src = data.publicUrl;
 
@@ -770,8 +846,9 @@ $("german-save-bottom").addEventListener("click", germanSave);
 $("german-add-course").addEventListener("click", () => {
   const courses = germanCollect().courses;
   courses.push({
+    course_id: "course-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
     level: "", title: "New German course", image: "", duration: "", fee: "",
-    description: "", link_text: "Explore More", link_url: ""
+    description: "", page_description: "", learning_points: [], link_text: "Explore More", link_url: ""
   });
   germanRenderFields({ courses });
   germanSetStatus("Course card added. Fill in its details, then click Save.");

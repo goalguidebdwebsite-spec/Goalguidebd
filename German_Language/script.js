@@ -177,6 +177,16 @@ navLinks.forEach((link) => {
     return url;
   }
 
+  function germanCourseId(course, index, usedIds) {
+    const source = course.course_id || course.title || course.level || "course-" + (index + 1);
+    const base = String(source).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "course-" + (index + 1);
+    let id = base;
+    let suffix = 2;
+    while (usedIds.has(id)) id = base + "-" + suffix++;
+    usedIds.add(id);
+    return id;
+  }
+
   function merge(content) {
     const data = content && typeof content === "object" ? content : {};
     return Object.assign({}, DEFAULTS, data, {
@@ -385,9 +395,13 @@ navLinks.forEach((link) => {
   }
 
   function render(content) {
-    const courses = Array.isArray(content && content.courses)
+    const savedCourses = Array.isArray(content && content.courses)
       ? content.courses
       : DEFAULTS.courses;
+    const usedIds = new Set();
+    const courses = savedCourses.map((course, index) => Object.assign({}, course, {
+      course_id: germanCourseId(course || {}, index, usedIds)
+    }));
 
     grid.innerHTML = "";
     courses.forEach((course, index) => {
@@ -434,8 +448,9 @@ navLinks.forEach((link) => {
         description.textContent = c.description || "";
 
       let href = safeUrl(c.link_url);
-      if (/^German_Language\/index\.html#(?:a1|a2|b1|b2)$/i.test(href)) {
-        href = "German " + String(c.level || fallback.level).toUpperCase() + "/index.html";
+      const legacyDetailLink = /^German_Language\/index\.html#(?:a1|a2|b1|b2)$/i.test(href) || /^German_Language\/German [AB][12]\/index\.html$/i.test(href);
+      if (!href || legacyDetailLink) {
+        href = "course.html?course=" + encodeURIComponent(c.course_id);
       } else if (/^German_Language\//i.test(href)) {
         href = "../" + encodeURI(href);
       }

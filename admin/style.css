@@ -438,6 +438,35 @@ button:focus-visible {
   margin: 1.25rem 0 1.5rem;
 }
 
+.german-course-editor-hint {
+  margin: .25rem 0 1rem;
+}
+
+.german-learning-points {
+  display: grid;
+  gap: .55rem;
+  margin: .4rem 0 .75rem;
+}
+
+.german-learning-point-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .6rem;
+  align-items: center;
+}
+
+.german-learning-point-row input {
+  min-width: 0;
+}
+
+.german-remove-learning-point {
+  white-space: nowrap;
+}
+
+.german-add-learning-point {
+  margin-top: .2rem;
+}
+
 .german-course-badge {
   display: inline-flex;
   align-items: center;
