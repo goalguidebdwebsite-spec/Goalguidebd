@@ -475,7 +475,11 @@
           </div>
         </div>
 
+        <p class="hero-hint german-course-editor-hint">Add as many course cards as you need, edit their details, or remove cards. Changes appear on the German Language page after you save.</p>
         <div id="german-course-fields"></div>
+        <div class="german-course-add-row">
+          <button class="btn btn-ghost" type="button" id="german-add-course">+ Add course card</button>
+        </div>
 
         <div class="save-bar">
           <button class="btn btn-primary" type="button" id="german-save-bottom" hidden>Save</button>
@@ -887,8 +891,8 @@
           </article>
           <article class="card help-card">
             <h2>German Language</h2>
-            <p>Edits the four A1, A2, B1, and B2 course cards on the German Language overview page, including image, title, duration, fee, description, and destination link.</p>
-            <p>Duration, fee, and description also update the matching A1–B2 course detail page. Choose an image link or upload an image, then save. Home page course cards are managed separately under Home.</p>
+            <p>Add, edit, and remove any number of course cards on the German Language overview page, including image, level, title, duration, fee, description, and destination link.</p>
+            <p>Duration, fee, and description also update the matching A1–B2 course detail page when the card uses one of those levels. Choose an image link or upload an image, then save. Home page course cards are managed separately under Home.</p>
           </article>
           <article class="card help-card">
             <h2>Class Schedule</h2>
@@ -973,6 +977,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=20261008-blog-stories"></script>
+  <script src="script.js?v=20261025-dynamic-german-courses"></script>
 </body>
 </html>

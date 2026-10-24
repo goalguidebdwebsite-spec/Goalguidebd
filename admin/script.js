@@ -532,20 +532,27 @@ function germanRenderFields(content) {
   const wrap = $("german-course-fields");
   wrap.innerHTML = "";
 
-  c.courses.slice(0, 4).forEach((course, index) => {
-    const fallback = GERMAN_DEFAULTS.courses[index];
+  c.courses.forEach((course, index) => {
+    const fallback = GERMAN_DEFAULTS.courses[index] || {
+      level: "", title: "New German course", image: "", duration: "", fee: "",
+      description: "", link_text: "Explore More", link_url: ""
+    };
     const data = Object.assign({}, fallback, course || {});
     data.image = normalizeGermanImagePath(data.image);
     if (/^German_Language\/index\.html#(?:a1|a2|b1|b2)$/i.test(data.link_url || "")) {
-      data.link_url = "German_Language/German " + fallback.level + "/index.html";
+      data.link_url = "German_Language/German " + (data.level || fallback.level).toUpperCase() + "/index.html";
     }
+    const displayTitle = String(data.title || fallback.title).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+    })[character]);
     const card = document.createElement("div");
     card.className = "card german-course-editor";
     card.innerHTML = `
       <h2>
-        <span>${data.title || fallback.title}</span>
+        <span>${displayTitle}</span>
         <span class="german-course-badge">Card ${index + 1}</span>
       </h2>
+      <button class="btn btn-ghost german-course-remove" type="button" aria-label="Remove course card ${index + 1}">Remove card</button>
 
       <div class="german-course-image-row">
         <img class="german-course-image-preview" id="german-image-preview-${index}" alt="">
@@ -629,12 +636,20 @@ function germanRenderFields(content) {
     $("german-image-file-" + index).addEventListener("change", (event) =>
       germanUploadImage(index, event)
     );
+
+    card.querySelector(".german-course-remove").addEventListener("click", () => {
+      const courses = germanCollect().courses;
+      courses.splice(index, 1);
+      germanRenderFields({ courses });
+      germanSetStatus("Course card removed. Click Save to publish the change.");
+    });
   });
 }
 
 function germanCollect() {
+  const cards = Array.from(document.querySelectorAll("#german-course-fields .german-course-editor"));
   return {
-    courses: [0, 1, 2, 3].map((index) => ({
+    courses: cards.map((card, index) => ({
       level: $("german-level-" + index).value.trim(),
       title: $("german-title-" + index).value.trim(),
       image: normalizeGermanImagePath($("german-image-" + index).value.trim()),
@@ -752,6 +767,17 @@ function germanLoadOnce() {
 
 $("german-save").addEventListener("click", germanSave);
 $("german-save-bottom").addEventListener("click", germanSave);
+$("german-add-course").addEventListener("click", () => {
+  const courses = germanCollect().courses;
+  courses.push({
+    level: "", title: "New German course", image: "", duration: "", fee: "",
+    description: "", link_text: "Explore More", link_url: ""
+  });
+  germanRenderFields({ courses });
+  germanSetStatus("Course card added. Fill in its details, then click Save.");
+  const cards = document.querySelectorAll("#german-course-fields .german-course-editor");
+  cards[cards.length - 1]?.scrollIntoView({ behavior: "smooth", block: "center" });
+});
 
 function germanReset() {
   germanRenderFields(GERMAN_DEFAULTS);

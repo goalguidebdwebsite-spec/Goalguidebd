@@ -385,14 +385,17 @@ navLinks.forEach((link) => {
   }
 
   function render(content) {
-    const courses = Array.isArray(content && content.courses) && content.courses.length
+    const courses = Array.isArray(content && content.courses)
       ? content.courses
       : DEFAULTS.courses;
 
     grid.innerHTML = "";
     courses.forEach((course, index) => {
       try {
-        const fallback = DEFAULTS.courses[index] || DEFAULTS.courses[0];
+        const fallback = DEFAULTS.courses[index] || {
+          level: "", title: "", image: "", duration: "", fee: "",
+          description: "", link_text: "Explore More", link_url: ""
+        };
         const c = Object.assign({}, fallback, course || {});
         c.image = normalizeGermanImagePath(c.image);
 
@@ -402,7 +405,8 @@ navLinks.forEach((link) => {
 
         const image = document.createElement("img");
         image.className = "german-course-image";
-        image.src = imageSrc(c.image || fallback.image);
+        image.style.display = c.image || fallback.image ? "block" : "none";
+        if (c.image || fallback.image) image.src = imageSrc(c.image || fallback.image);
         image.alt = c.title || fallback.title;
         image.loading = index > 1 ? "lazy" : "eager";
 

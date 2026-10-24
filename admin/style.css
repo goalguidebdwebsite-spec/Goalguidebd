@@ -419,6 +419,25 @@ button:focus-visible {
   gap: .75rem;
 }
 
+.german-course-remove {
+  display: block;
+  margin: 0 0 1rem auto;
+  color: #b42318;
+  border-color: #f0b8b4;
+}
+
+.german-course-remove:hover {
+  color: #991b1b;
+  background: #fff5f4;
+  border-color: #e69b95;
+}
+
+.german-course-add-row {
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 0 1.5rem;
+}
+
 .german-course-badge {
   display: inline-flex;
   align-items: center;
