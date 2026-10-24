@@ -177,16 +177,6 @@ navLinks.forEach((link) => {
     return url;
   }
 
-  function germanCourseId(course, index, usedIds) {
-    const source = course.course_id || course.title || course.level || "course-" + (index + 1);
-    const base = String(source).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "course-" + (index + 1);
-    let id = base;
-    let suffix = 2;
-    while (usedIds.has(id)) id = base + "-" + suffix++;
-    usedIds.add(id);
-    return id;
-  }
-
   function merge(content) {
     const data = content && typeof content === "object" ? content : {};
     return Object.assign({}, DEFAULTS, data, {
@@ -385,6 +375,15 @@ navLinks.forEach((link) => {
     return url;
   }
 
+  function germanCourseId(course, index, usedIds) {
+    const source = course.course_id || course.title || course.level || "course-" + (index + 1);
+    const base = String(source).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "course-" + (index + 1);
+    let id = base;
+    let suffix = 2;
+    while (usedIds.has(id)) id = base + "-" + suffix++;
+    usedIds.add(id);
+    return id;
+  }
 
   function normalizeGermanImagePath(value) {
     return String(value || "")
